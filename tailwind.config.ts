@@ -21,6 +21,7 @@ const config = {
       fontFamily: {
         sans: ["var(--font-maven_pro)", "sans-serif"],
         serif: ["var(--font-patua_one)", "serif"],
+        raleway: ["var(--font-raleway)", "sans-serif"],
       },
       colors: {
         border: "hsl(var(--border))",

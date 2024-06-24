@@ -1,4 +1,4 @@
-import { mavinPro, patuaOne } from "@/font";
+import { mavinPro, patuaOne, raleway } from "@/font";
 import type { Metadata, Viewport } from "next";
 import Head from "next/head";
 import "./globals.css";
@@ -47,7 +47,9 @@ export default function RootLayout({
         <meta name="msapplication-TileColor" content="#2b5797"></meta>
         <meta name="theme-color" content="#ffffff"></meta>
       </Head>
-      <body className={`${mavinPro.variable} ${patuaOne.variable} font-sans`}>
+      <body
+        className={`${mavinPro.variable} ${patuaOne.variable} ${raleway.variable} font-sans`}
+      >
         {children}
       </body>
     </html>

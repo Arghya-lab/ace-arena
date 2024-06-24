@@ -1,8 +1,8 @@
 export enum SuitsEnum {
   Clubs = "Clubs", // ♣️
+  Diamonds = "Diamonds", // ♦️
   Spades = "Spades", // ♠️
   Hearts = "Hearts", // ♥️
-  Diamonds = "Diamonds", // ♦️
 }
 
 export enum CardRankEnum {
@@ -27,6 +27,7 @@ export interface ICard {
   suit: SuitsEnum;
   rank: CardRankEnum;
   url: string;
+  textImg: string;
   isValid29GameCard: boolean;
   "29GameCardRank": -1 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8; // J=>1, 9=>2, A=>3, 10=>4, K=>5, Q=>6, 8=>7, 7=>8
   "29GameCardPoint": 0 | 1 | 2 | 3;
