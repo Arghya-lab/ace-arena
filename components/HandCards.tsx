@@ -67,10 +67,9 @@ function HandCards({
             style={{ transformOrigin: "bottom left" }}
             exit={{
               x: 0,
-              y: -(pageHeight / 2),
+              y: -((pageHeight - 56) / 2),
               rotate: 0,
-              scale: 0.72,
-              transformOrigin: "top left",
+              scale: 0.64,
             }}
             onClick={() => handleCardClick(card)}
           >
