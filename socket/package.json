@@ -1,0 +1,23 @@
+{
+  "name": "ace-arena-socket",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "npx tsc",
+    "start": "npx tsc && node dist/index.js",
+    "dev": "tsc-watch --onSuccess \"node ./dist/index.js\""
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "lodash": "^4.17.21",
+    "socket.io": "^4.7.5"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.9",
+    "tsc-watch": "^6.2.0",
+    "typescript": "^5.5.3"
+  }
+}
