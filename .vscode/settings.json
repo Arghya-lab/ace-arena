@@ -1,3 +1,21 @@
 {
-  "cSpell.words": ["nextjs", "raleway", "Signin"]
+  "cSpell.words": [
+    "CREATEROOM",
+    "CREATETWENTY",
+    "DELETETWENTY",
+    "JOINTWENTY",
+    "LEAVETWENTY",
+    "nextjs",
+    "PLAYERJOINED",
+    "PLAYERSINROOM",
+    "PLAYERSJOINED",
+    "raleway",
+    "ROOMCODE",
+    "ROOMJOIN",
+    "ROOMJOINED",
+    "ROOMLEAVE",
+    "SHOWOFFLINE",
+    "SHOWONLINE",
+    "Signin"
+  ]
 }

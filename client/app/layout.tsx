@@ -1,3 +1,4 @@
+import SocketProvider from "@/components/providers/SocketProvider";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import TopNavbar from "@/components/TopNavbar";
 import { mavinPro, patuaOne, raleway } from "@/font";
@@ -60,10 +61,12 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <TopNavbar />
-            <main className="relative h-[calc(100dvh-56px)] min-h-[560px] overflow-hidden">
-              {children}
-            </main>
+            <SocketProvider>
+              <TopNavbar />
+              <main className="relative h-[calc(100dvh-56px)] min-h-[560px] overflow-hidden">
+                {children}
+              </main>
+            </SocketProvider>
           </ThemeProvider>
         </body>
       </html>

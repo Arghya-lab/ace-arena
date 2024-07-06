@@ -1,19 +1,27 @@
 import { createServer } from "http";
 import dotEnv from "dotenv";
+import express from "express";
+import cors from "cors";
 import socketInit from "./lib/socketInit";
+import connectToMongo from "./lib/db";
+import routes from "./router";
 
 dotEnv.config();
 
-function serverInit() {
-  //  Create http server with health url as /health
-  const httpServer = createServer((req, res) => {
-    if (req.method === "GET" && req.url === "/health") {
-      res.writeHead(200, { "Content-Type": "text/plain" });
-      res.end("Hello World!");
-    }
-  });
+async function serverInit() {
+  //  Create http server
+  const app = express();
+  app.use(cors());
+  const httpServer = createServer(app);
   const PORT = process.env.PORT || 8000;
 
+  // first connect to mongo db
+  await connectToMongo();
+
+  // routes
+  app.use("/", routes);
+
+  // init socket
   socketInit(httpServer);
 
   //  Start the server

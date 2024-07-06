@@ -1,5 +1,10 @@
 "use client";
 
+import {
+  CreateTwenty9RoomFormSchemaType,
+  JoinTwenty9RoomFormSchemaType,
+} from "@/@types/schema";
+import { useSocket } from "@/components/providers/SocketProvider";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -16,52 +21,45 @@ import {
   TypographyH4,
   TypographyMuted,
 } from "@/components/ui/typography";
+import {
+  CreateTwenty9RoomFormSchema,
+  JoinTwenty9RoomFormSchema,
+} from "@/formSchemas/twenty9Room";
+import isRoomCodeValid from "@/utils/isRoomCodeValid";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
-
-const JoinRoomFormSchema = z.object({
-  roomCode: z
-    .string()
-    .min(2, {
-      message: "Room code must be 6 characters.",
-    })
-    .max(2, {
-      message: "Room code must be 6 characters.",
-    }),
-});
-
-const CreateRoomFormSchema = z.object({
-  seventhCard: z.boolean().default(false).optional(),
-  doubleRedouble: z.boolean().default(false).optional(),
-});
 
 function Twenty9PlayWithFriendsPage() {
+  const { createTwenty9Room, joinTwenty9Room } = useSocket();
   const [cardType, setCardType] = useState<"joinRoom" | "createRoom">(
     "joinRoom"
   );
 
-  const joinRoomForm = useForm<z.infer<typeof JoinRoomFormSchema>>({
-    resolver: zodResolver(JoinRoomFormSchema),
+  const joinRoomForm = useForm<JoinTwenty9RoomFormSchemaType>({
+    resolver: zodResolver(JoinTwenty9RoomFormSchema),
     defaultValues: {
       roomCode: "",
     },
   });
 
-  const createRoomForm = useForm<z.infer<typeof CreateRoomFormSchema>>({
-    resolver: zodResolver(CreateRoomFormSchema),
+  const createRoomForm = useForm<CreateTwenty9RoomFormSchemaType>({
+    resolver: zodResolver(CreateTwenty9RoomFormSchema),
     defaultValues: {
       seventhCard: true,
       doubleRedouble: true,
     },
   });
 
-  function handleJoinRoom(data: z.infer<typeof JoinRoomFormSchema>) {
-    console.log("Joined room:", data);
+  async function handleJoinRoom(data: JoinTwenty9RoomFormSchemaType) {
+    if (!(await isRoomCodeValid(data.roomCode))) {
+      joinRoomForm.setError("roomCode", { message: "Invalid room code." });
+    }
+
+    joinTwenty9Room(data);
   }
-  function handleCreateRoom(data: z.infer<typeof CreateRoomFormSchema>) {
-    console.log("Created room:", data);
+  function handleCreateRoom(data: CreateTwenty9RoomFormSchemaType) {
+    createTwenty9Room(data);
   }
 
   return (
@@ -84,7 +82,7 @@ function Twenty9PlayWithFriendsPage() {
                   name="roomCode"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>ROOM CODE</FormLabel>
+                      <FormLabel>Room Code</FormLabel>
                       <FormControl>
                         <Input placeholder="Enter room code" {...field} />
                       </FormControl>

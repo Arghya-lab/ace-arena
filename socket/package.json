@@ -11,11 +11,15 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^16.4.5",
+    "express": "^4.19.2",
     "lodash": "^4.17.21",
+    "mongoose": "^8.4.4",
     "socket.io": "^4.7.5"
   },
   "devDependencies": {
+    "@types/express": "^4.17.21",
     "@types/node": "^20.14.9",
     "tsc-watch": "^6.2.0",
     "typescript": "^5.5.3"

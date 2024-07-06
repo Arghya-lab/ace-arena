@@ -132,7 +132,9 @@ export function TypographyLead({
   className?: string;
 }) {
   return (
-    <p className={cn("text-xl text-muted-foreground", className)}>{children}</p>
+    <span className={cn("text-xl text-muted-foreground", className)}>
+      {children}
+    </span>
   );
 }
 
