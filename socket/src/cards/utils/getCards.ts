@@ -1,8 +1,6 @@
-// "server only";
-
-import { IPlayerCards } from "@/@types/card";
 import { chunk, shuffle } from "lodash";
 import cards from "..";
+import { IPlayerCards } from "../../@types/card";
 
 export function getGameCards(): IPlayerCards[] {
   const shuffleCards = shuffle(cards);

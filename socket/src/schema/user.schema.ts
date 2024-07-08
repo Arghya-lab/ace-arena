@@ -18,6 +18,17 @@ const userSchema = new Schema<IUserSchema>({
     type: Boolean,
     default: false,
   },
+  teamId: {
+    type: String,
+    enum: ["A", "B", "C", "D"],
+    required: true,
+  },
+  playerId: {
+    type: Number,
+    enum: [1, 2, 3, 4],
+    required: true,
+    unique: true,
+  },
 });
 
 export default userSchema;

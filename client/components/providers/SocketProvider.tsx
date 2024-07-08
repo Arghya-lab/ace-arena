@@ -1,137 +1,71 @@
 "use client";
 
-import { GameEnum, IPlayer } from "@/@types/game";
+import { IPlayer } from "@/@types/game";
 import {
   CreateTwenty9RoomFormSchemaType,
   JoinTwenty9RoomFormSchemaType,
 } from "@/@types/schema";
+import { RoomType, SocketEvent, SocketUser } from "@/@types/socket";
+import SocketContext from "@/context/SocketContext";
 import {
-  RoomType,
-  SocketContextType,
-  SocketEvent,
-  SocketUser,
-} from "@/@types/socket";
+  clearSocketListeners,
+  handleSocketEvents,
+  initializeSocket,
+} from "@/services/socket";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
-import {
-  createContext,
-  ReactNode,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
-import { io, Socket } from "socket.io-client";
+import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
+import { Socket } from "socket.io-client";
 
-const defaultValues = {
-  isConnected: false,
-  room: null,
-  createTwenty9Room: (data: CreateTwenty9RoomFormSchemaType) => {},
-  joinTwenty9Room: (data: JoinTwenty9RoomFormSchemaType) => {},
-  leaveTwenty9Room: () => {},
-  deleteTwenty9Room: () => {},
-};
-
-export const SocketContext = createContext<SocketContextType>(defaultValues);
-
-export const useSocket = () => useContext(SocketContext);
-
-function SocketProvider({ children }: { children: Readonly<ReactNode> }) {
+export default function SocketProvider({
+  children,
+}: {
+  children: Readonly<ReactNode>;
+}) {
   const [socket, setSocket] = useState<Socket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
   const [room, setRoom] = useState<RoomType | null>(null);
+
   const { user } = useUser();
   const router = useRouter();
 
   const socketUser: SocketUser | null = useMemo(() => {
-    if (user) {
-      return {
-        id: user.id,
-        name:
-          user.fullName ||
-          user.username ||
-          user.firstName ||
-          "" + user.lastName ||
-          "",
-        imageUrl: user.imageUrl,
-      };
-    } else {
-      return null;
-    }
+    if (!user) return null;
+
+    return {
+      id: user.id,
+      name:
+        user.fullName ||
+        user.username ||
+        user.firstName ||
+        user.lastName ||
+        user.id,
+      imageUrl: user.imageUrl,
+    };
   }, [user]);
 
   useEffect(() => {
-    function onConnect() {
-      setIsConnected(true);
-    }
-
-    function onDisconnect() {
-      setIsConnected(false);
-    }
-
-    function onRoomJoin({
-      gameType,
-      roomCode,
-      isRoomAdmin,
-    }: {
-      gameType: GameEnum;
-      roomCode: string;
-      isRoomAdmin: boolean;
-    }) {
-      setRoom({ roomCode, isRoomAdmin, players: [] });
-      switch (gameType) {
-        case GameEnum.TWENTY9:
-          router.push("/game/twenty-9/room");
-          break;
-
-        default:
-          break;
-      }
-    }
-
-    function onRoomLeave(payload: IPlayer[]) {
-      setRoom(null);
-    }
-
-    function onPlayersInRoom(payload: IPlayer[]) {
-      setRoom((prev) => (prev ? { ...prev, players: payload } : prev));
-    }
-
-    if (user) {
-      const _socket = io(process.env.SOCKET_SERVER_URL!, {
-        query: { userId: user.id },
+    if (socketUser) {
+      const _socket = initializeSocket(socketUser);
+      handleSocketEvents(_socket, {
+        setIsConnected,
+        setRoom,
+        router,
       });
       setSocket(_socket);
 
-      // Socket events
-      _socket.on("connect", onConnect);
-      _socket.on("disconnect", onDisconnect);
-
-      _socket.on(SocketEvent.ROOMJOIN, onRoomJoin);
-      _socket.on(SocketEvent.ROOMLEAVE, onRoomLeave);
-      _socket.on(SocketEvent.PLAYERSINROOM, onPlayersInRoom);
-
       return () => {
-        _socket.off("connect");
-        _socket.off("disconnect");
-
-        _socket.off(SocketEvent.ROOMJOIN);
-        _socket.off(SocketEvent.PLAYERSINROOM);
-
+        clearSocketListeners(_socket);
         _socket.disconnect();
         setSocket(null);
       };
     }
-  }, [user, router]);
+  }, [socketUser, router]);
 
   const createTwenty9Room = useCallback(
     (data: CreateTwenty9RoomFormSchemaType) => {
       if (socket && socketUser) {
-        socket.emit(SocketEvent.CREATETWENTY9ROOM, {
-          user: socketUser,
-          payload: data,
-        });
+        socket.emit(SocketEvent.CREATETWENTY9ROOM, data);
       }
     },
     [socket, socketUser]
@@ -140,10 +74,7 @@ function SocketProvider({ children }: { children: Readonly<ReactNode> }) {
   const joinTwenty9Room = useCallback(
     (data: JoinTwenty9RoomFormSchemaType) => {
       if (socket && socketUser) {
-        socket.emit(SocketEvent.JOINTWENTY9ROOM, {
-          user: socketUser,
-          payload: data,
-        });
+        socket.emit(SocketEvent.JOINTWENTY9ROOM, data);
       }
     },
     [socket, socketUser]
@@ -151,36 +82,48 @@ function SocketProvider({ children }: { children: Readonly<ReactNode> }) {
 
   const leaveTwenty9Room = useCallback(() => {
     if (socket && room) {
-      socket.emit(SocketEvent.LEAVETWENTY9ROOM, {
-        user: socketUser,
-        payload: { roomCode: room.roomCode },
-      });
+      socket.emit(SocketEvent.LEAVETWENTY9ROOM, { roomCode: room.roomCode });
     }
-  }, [socket, socketUser, room]);
+  }, [socket, room]);
 
   const deleteTwenty9Room = useCallback(() => {
-    if (socket && room && room.isRoomAdmin) {
-      socket.emit(SocketEvent.DELETETWENTY9ROOM, {
-        user: socketUser,
-        payload: { roomCode: room.roomCode },
-      });
+    if (socket && room && room.isMeRoomAdmin) {
+      socket.emit(SocketEvent.DELETETWENTY9ROOM, { roomCode: room.roomCode });
     }
-  }, [socket, socketUser, room]);
+  }, [socket, room]);
+
+  const addPlayerToAdminTeam_twenty9Room = useCallback(
+    (player: IPlayer) => {
+      if (
+        socket &&
+        room &&
+        room.isTeamGame &&
+        room.isMeRoomAdmin &&
+        room.players.length === 4
+      ) {
+        socket.emit(SocketEvent.ADDPLAYERTOADMINTEAM_TWENTY9ROOM, {
+          roomCode: room.roomCode,
+          player,
+        });
+      }
+    },
+    [socket, room]
+  );
 
   return (
     <SocketContext.Provider
       value={{
+        socket,
         isConnected,
         room,
         createTwenty9Room,
         joinTwenty9Room,
         leaveTwenty9Room,
         deleteTwenty9Room,
+        addPlayerToAdminTeam_twenty9Room,
       }}
     >
       {children}
     </SocketContext.Provider>
   );
 }
-
-export default SocketProvider;

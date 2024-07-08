@@ -1,68 +1,55 @@
 "use client";
 
-import { useSocket } from "@/components/providers/SocketProvider";
-import RoomPlayerCard from "@/components/RoomPlayerCard";
-import { Button } from "@/components/ui/button";
-import { TypographyH2, TypographyH4 } from "@/components/ui/typography";
-import { cn } from "@/lib/utils";
-import { AnimatePresence } from "framer-motion";
-import { LogOut, SquarePlay, Trash2 } from "lucide-react";
+import { ICard } from "@/@types/card";
+import { SocketEvent } from "@/@types/socket";
+import useSocket from "@/hooks/useSocket";
 import { redirect } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
+import PlayerJoinDashboard from "./PlayerJoinDashboard";
 
 function Twenty9RoomPage() {
-  const { room, leaveTwenty9Room, deleteTwenty9Room } = useSocket();
+  const { room, socket } = useSocket();
+  if (!room) redirect("/game/twenty-9/play-with-friends");
+  if (!socket) redirect("/");
 
-  if (!room) redirect("/");
+  const [gamePhase, setGamePhase] = useState<
+    | "uninitialized" //  game not started
+    | "firstPhaseCardsDistributed" // first phase cards distributed but not yet bidding started
+    | "bided" // bided by players and bidding owner and game winning point is known but trump suite is not selected
+    | "trumpSelected" // trump suite is selected but second phase cards not started distributed
+    | "secondPhaseCardsDistributed" // second phase cards distributed but players not stated to lead the trick
+    | "initialized"
+  >("uninitialized");
+  const [inHandCards, setInHandCards] = useState<ICard[]>([]);
 
-  return (
-    <div className="h-[calc(100dvh-56px)] min-h-[560px] overflow-y-auto p-4">
-      <TypographyH2 className="py-4 text-center">
-        Online Multiplayer
-      </TypographyH2>
-      {room.roomCode && (
-        <TypographyH4 className="text-center">
-          Room code:{" "}
-          <span className="font-mono tracking-wide text-cyan-500">
-            {room.roomCode}
-          </span>
-        </TypographyH4>
-      )}
-      <div className="flex flex-wrap justify-center gap-4 pb-16 pt-20">
-        <AnimatePresence>
-          {room.players.map((player) => (
-            <RoomPlayerCard key={player.clerkId} player={player} />
-          ))}
-          {Array.from({ length: 4 - room.players.length }).map((i, id) => (
-            <RoomPlayerCard key={id} />
-          ))}
-        </AnimatePresence>
-      </div>
-      <div className={cn({ "grid grid-cols-3": room && room.isRoomAdmin })}>
-        {room && !room.isRoomAdmin && (
-          <Button variant="destructive" onClick={leaveTwenty9Room}>
-            <LogOut size={16} /> Leave
-          </Button>
-        )}
-        {room && room.isRoomAdmin && (
-          <>
-            <Button
-              className="place-self-center"
-              variant="destructive"
-              onClick={deleteTwenty9Room}
-            >
-              <Trash2 size={16} /> Delete
-            </Button>
-            <Button
-              className="place-self-center"
-              disabled={room.players.length !== 4}
-            >
-              <SquarePlay size={16} /> Start Match
-            </Button>
-          </>
-        )}
-      </div>
-    </div>
-  );
+  useEffect(() => {
+    function onTwenty9FirstHand(payload: ICard[]) {
+      setInHandCards(payload);
+      setGamePhase("firstPhaseCardsDistributed");
+      console.log(payload);
+    }
+
+    socket.on(SocketEvent.TWENTY9FIRSTHAND, onTwenty9FirstHand);
+    return () => {
+      socket.off(SocketEvent.TWENTY9FIRSTHAND);
+    };
+  }, [socket]);
+
+  const startTwenty9Game = useCallback(() => {
+    if (socket && room && room.isMeRoomAdmin && room.players.length === 4) {
+      socket.emit(SocketEvent.STARTTWENTY9GAME, { roomCode: room.roomCode });
+    }
+  }, [socket, room]);
+
+  switch (gamePhase) {
+    case "uninitialized":
+      return (
+        <PlayerJoinDashboard room={room} startTwenty9Game={startTwenty9Game} />
+      );
+
+    default:
+      return <p>Hello</p>;
+  }
 }
 
 export default Twenty9RoomPage;

@@ -3,8 +3,8 @@ import sortCards from "@/cards/utils/sortCards";
 import usePageSize from "@/hooks/usePageSize";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import Card from "./Card";
 import { Button } from "./ui/button";
-import Card from "./ui/Card";
 
 function HandCards({
   cards,

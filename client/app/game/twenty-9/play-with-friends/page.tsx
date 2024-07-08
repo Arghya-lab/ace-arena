@@ -4,7 +4,6 @@ import {
   CreateTwenty9RoomFormSchemaType,
   JoinTwenty9RoomFormSchemaType,
 } from "@/@types/schema";
-import { useSocket } from "@/components/providers/SocketProvider";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -25,6 +24,7 @@ import {
   CreateTwenty9RoomFormSchema,
   JoinTwenty9RoomFormSchema,
 } from "@/formSchemas/twenty9Room";
+import useSocket from "@/hooks/useSocket";
 import isRoomCodeValid from "@/utils/isRoomCodeValid";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
@@ -84,7 +84,11 @@ function Twenty9PlayWithFriendsPage() {
                     <FormItem>
                       <FormLabel>Room Code</FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter room code" {...field} />
+                        <Input
+                          placeholder="Enter room code"
+                          autoComplete="off"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

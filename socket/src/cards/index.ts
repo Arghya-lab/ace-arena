@@ -1,4 +1,4 @@
-import { CardRankEnum, ICard, SuitsEnum } from "@/@types/card";
+import { CardRankEnum, ICard, SuitsEnum } from "../@types/card";
 
 export const clubsCards: Readonly<ICard[]> = [
   {

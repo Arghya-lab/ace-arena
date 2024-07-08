@@ -1,13 +1,13 @@
 "use client";
 
-import { IGame } from "@/app/home/page";
+import { IGame } from "@/@types/game";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
+import cn from "@/utils/cn";
 import Image from "next/image";
 import Link from "next/link";
 import { TypographyH3 } from "./ui/typography";

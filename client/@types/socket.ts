@@ -1,3 +1,4 @@
+import { Socket } from "socket.io-client";
 import { IPlayer } from "./game";
 import {
   CreateTwenty9RoomFormSchemaType,
@@ -6,17 +7,20 @@ import {
 
 export interface RoomType {
   roomCode: string;
-  isRoomAdmin: boolean;
+  isMeRoomAdmin: boolean;
+  isTeamGame: boolean;
   players: IPlayer[];
 }
 
 export interface SocketContextType {
+  socket: Socket | null;
   isConnected: boolean;
   room: RoomType | null;
   createTwenty9Room: (data: CreateTwenty9RoomFormSchemaType) => void;
   joinTwenty9Room: (data: JoinTwenty9RoomFormSchemaType) => void;
   leaveTwenty9Room: () => void;
   deleteTwenty9Room: () => void;
+  addPlayerToAdminTeam_twenty9Room: (player: IPlayer) => void;
 }
 
 export type SocketUser = {
@@ -34,9 +38,12 @@ export enum SocketEvent {
   JOINTWENTY9ROOM = "event:joinTwenty9Room",
   LEAVETWENTY9ROOM = "event:leaveTwenty9Room",
   DELETETWENTY9ROOM = "event:deleteTwenty9Room", // only room admin can delete the room
+  ADDPLAYERTOADMINTEAM_TWENTY9ROOM = "event:addPlayerToAdminTeam_twenty9Room", // only room admin can delete the room
+  STARTTWENTY9GAME = "event:startTwenty9game", // only room admin can start the game
 
   // server created events
   ROOMJOIN = "event:roomJoin",
   ROOMLEAVE = "event:roomLeave",
   PLAYERSINROOM = "event:playersInRoom",
+  TWENTY9FIRSTHAND = "event:twenty9FirstHand",
 }

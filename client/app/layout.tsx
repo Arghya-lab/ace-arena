@@ -1,5 +1,5 @@
 import SocketProvider from "@/components/providers/SocketProvider";
-import { ThemeProvider } from "@/components/providers/ThemeProvider";
+import ThemeProvider from "@/components/providers/ThemeProvider";
 import TopNavbar from "@/components/TopNavbar";
 import { mavinPro, patuaOne, raleway } from "@/font";
 import { ClerkProvider } from "@clerk/nextjs";

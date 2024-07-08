@@ -17,7 +17,9 @@ export enum GameEnum {
 export interface IPlayer {
   _id: string;
   clerkId: string;
+  name: string;
   imageUrl: string;
   isRoomAdmin: boolean;
-  name: string;
+  teamId: "A" | "B" | "C" | "D";
+  playerId: 1 | 2 | 3 | 4;
 }

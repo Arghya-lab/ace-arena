@@ -1,8 +1,8 @@
 import { ICard, SuitsEnum } from "@/@types/card";
-import { cn } from "@/lib/utils";
+import cn from "@/utils/cn";
 import Image from "next/image";
 import { useState } from "react";
-import { TypographyP } from "./typography";
+import { TypographyP } from "./ui/typography";
 
 function Card({ card }: { card?: ICard }) {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -37,7 +37,7 @@ function Card({ card }: { card?: ICard }) {
         >
           <TypographyP
             className={cn(
-              "font-raleway w-10 break-words text-3xl tracking-widest",
+              "w-10 break-words font-raleway text-3xl tracking-widest",
               !card && "w-auto text-6xl opacity-50"
             )}
           >
