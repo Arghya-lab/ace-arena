@@ -1,9 +1,11 @@
 {
   "cSpell.words": [
     "ADDPLAYERTOADMINTEAM",
+    "BIDCHANGE",
     "CREATEROOM",
     "CREATETWENTY",
     "DELETETWENTY",
+    "DOTWENTY",
     "JOINTWENTY",
     "LEAVETWENTY",
     "nextjs",

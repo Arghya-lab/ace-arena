@@ -14,7 +14,7 @@ function Card({ card }: { card?: ICard }) {
   return (
     <div
       className={cn(
-        "relative aspect-[13/20] w-36 rounded-xl md:w-48",
+        "relative aspect-[13/20] w-36 rounded-xl",
         !card && "m-8 flex items-center justify-center border border-[#d19f4e]"
       )}
       style={{
@@ -26,7 +26,7 @@ function Card({ card }: { card?: ICard }) {
       {(!isLoaded || isError) && (
         <div
           className={cn(
-            "absolute left-0 top-0 h-full w-full overflow-hidden rounded-xl p-2 font-semibold md:w-48",
+            "absolute left-0 top-0 h-full w-full overflow-hidden rounded-xl p-2 font-semibold",
             card?.suit === SuitsEnum.Clubs && "text-black",
             card?.suit === SuitsEnum.Spades && "text-black",
             card?.suit === SuitsEnum.Diamonds && "text-red-600",
@@ -50,10 +50,7 @@ function Card({ card }: { card?: ICard }) {
         alt={card?.textImg || "A-A"}
         width={256}
         height={(256 * 20) / 13}
-        className={cn(
-          "w-36 md:w-48",
-          card && "absolute left-0 top-0 aspect-[13/20]"
-        )}
+        className={cn("w-36", card && "absolute left-0 top-0 aspect-[13/20]")}
         draggable="false"
         onLoad={() => setIsLoaded(true)}
         onError={() => setIsError(true)}
@@ -66,7 +63,7 @@ function Card({ card }: { card?: ICard }) {
             alt=""
             width={64}
             height={(64 * 20) / 13}
-            className="absolute left-0.5 top-0.5 w-12 -rotate-90 md:w-16"
+            className="absolute left-0.5 top-0.5 w-12 -rotate-90"
             draggable="false"
             onLoad={() => setIsCornerLoaded(true)}
             onError={() => setIsCornerError(true)}
@@ -77,7 +74,7 @@ function Card({ card }: { card?: ICard }) {
             alt=""
             width={64}
             height={(64 * 20) / 13}
-            className="absolute right-0.5 top-0.5 w-12 md:w-16"
+            className="absolute right-0.5 top-0.5 w-12"
             draggable="false"
             onLoad={() => setIsCornerLoaded(true)}
             onError={() => setIsCornerError(true)}
@@ -88,7 +85,7 @@ function Card({ card }: { card?: ICard }) {
             alt=""
             width={64}
             height={(64 * 20) / 13}
-            className="absolute bottom-0.5 right-0.5 w-12 rotate-90 md:w-16"
+            className="absolute bottom-0.5 right-0.5 w-12 rotate-90"
             draggable="false"
             onLoad={() => setIsCornerLoaded(true)}
             onError={() => setIsCornerError(true)}
@@ -99,7 +96,7 @@ function Card({ card }: { card?: ICard }) {
             alt=""
             width={64}
             height={(64 * 20) / 13}
-            className="absolute bottom-0.5 left-0.5 w-12 rotate-180 md:w-16"
+            className="absolute bottom-0.5 left-0.5 w-12 rotate-180"
             draggable="false"
             onLoad={() => setIsCornerLoaded(true)}
             onError={() => setIsCornerError(true)}

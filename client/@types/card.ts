@@ -37,3 +37,10 @@ export interface IPlayerCards {
   playerId: 1 | 2 | 3 | 4;
   cards: ICard[];
 }
+
+export type ICardCounts = [
+  { playerId: 1; count: number },
+  { playerId: 2; count: number },
+  { playerId: 3; count: number },
+  { playerId: 4; count: number },
+];

@@ -6,6 +6,7 @@ import leaveTwenty9Room from "./leaveTwenty9Room.handler";
 import deleteTwenty9Room from "./deleteTwenty9Room.handler";
 import addPlayerToAdminTeam_twenty9Room from "./addPlayerToAdminTeam_twenty9Room.handler";
 import startTwenty9game from "./startTwenty9game.handler";
+import twenty9Bid from "./twenty9Bid.handler";
 
 export {
   onSocketConnect,
@@ -16,4 +17,5 @@ export {
   deleteTwenty9Room,
   addPlayerToAdminTeam_twenty9Room,
   startTwenty9game,
+  twenty9Bid,
 };

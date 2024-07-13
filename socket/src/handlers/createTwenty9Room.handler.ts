@@ -17,11 +17,17 @@ export default async function createTwenty9Room(
 
   if (session) {
     try {
+      let roomCode = genRoomCode(6);
+      while (await Twenty9Room.findOne({ roomCode })) {
+        //if room already exist with the room code then replace the room code
+        roomCode = genRoomCode(6);
+      }
+
       const newRoom = await Twenty9Room.create({
-        roomCode: genRoomCode(6),
+        roomCode,
+        isTeamGame: true,
         isSeventhCardEnable: payload?.seventhCard,
         isDoubleRedoubleEnable: payload?.doubleRedouble,
-        isTeamGame: true,
         players: [
           {
             clerkId: session.id,
@@ -34,7 +40,7 @@ export default async function createTwenty9Room(
         ],
       });
 
-      socket.join(newRoom._id.toString());
+      socket.join(newRoom.roomCode);
 
       this.io.to(session.id).emit(
         SocketEvent.ROOMJOIN,
@@ -46,7 +52,7 @@ export default async function createTwenty9Room(
         },
         () => {
           // Emit PLAYERSINROOM event after ROOMJOIN event is acknowledged
-          io.to(newRoom._id.toString()).emit(
+          io.to(newRoom.roomCode).emit(
             SocketEvent.PLAYERSINROOM,
             newRoom.players
           );

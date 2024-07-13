@@ -19,7 +19,7 @@ export default async function deleteTwenty9Room(
 
       if (room) {
         Twenty9Room.findByIdAndDelete(room._id).then(() => {
-          io.in(room._id.toString()).socketsLeave(room._id.toString());
+          io.in(room.roomCode).socketsLeave(room.roomCode);
           io.to(room.players.map((player) => player.clerkId)).emit(
             SocketEvent.ROOMLEAVE
           );

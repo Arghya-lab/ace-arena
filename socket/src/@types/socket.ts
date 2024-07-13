@@ -21,10 +21,13 @@ export enum SocketEvent {
   DELETETWENTY9ROOM = "event:deleteTwenty9Room", // only room admin can delete the room
   ADDPLAYERTOADMINTEAM_TWENTY9ROOM = "event:addPlayerToAdminTeam_twenty9Room", // only room admin can delete the room
   STARTTWENTY9GAME = "event:startTwenty9game", // only room admin can start the game
+  TWENTY9BID = "event:twenty9Bid",
 
   // server created events
   ROOMJOIN = "event:roomJoin",
   ROOMLEAVE = "event:roomLeave",
   PLAYERSINROOM = "event:playersInRoom",
   TWENTY9FIRSTHAND = "event:twenty9FirstHand",
+  DOTWENTY9BID = "event:doTwenty9Bid",
+  TWENTY9BIDCHANGE = "event:twenty9BidChange",
 }

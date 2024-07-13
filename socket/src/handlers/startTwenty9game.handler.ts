@@ -1,7 +1,9 @@
 import { Server } from "socket.io";
-import { SessionSocket, SocketEvent } from "../@types/socket";
+import { SessionSocket } from "../@types/socket";
 import Twenty9Room from "../models/Twenty9Room.model";
-import { get29Game1stHandCards } from "../cards";
+import { ITwenty9RoomDocument } from "../schema/twenty9Room.schema";
+import distributeFirstPhaseCards from "./helpers/distributeFirstPhaseCards.twenty9";
+import startBiding from "./helpers/startBidding.twenty9";
 
 export default async function startTwenty9game(
   this: { socket: SessionSocket; io: Server },
@@ -14,29 +16,16 @@ export default async function startTwenty9game(
 
   if (session) {
     try {
-      let room = await Twenty9Room.findOne({
+      let room: ITwenty9RoomDocument | null = await Twenty9Room.findOne({
         roomCode: payload.roomCode,
         "players.clerkId": session.id,
         "players.isRoomAdmin": true,
       });
 
       if (room) {
-        room.cardDistributions = get29Game1stHandCards();
-        room.gamePhase = "firstPhaseCardsDistributed";
-        await room.save();
+        await distributeFirstPhaseCards(room, io);
 
-        room.players.forEach((player) => {
-          const playerFirstHandCards =
-            room.cardDistributions.find(
-              (cardDistribution) =>
-                cardDistribution.playerId === player.playerId
-            )?.cards || [];
-
-          io.to(player.clerkId).emit(
-            SocketEvent.TWENTY9FIRSTHAND,
-            playerFirstHandCards
-          );
-        });
+        await startBiding(room, io, session);
       }
     } catch (error) {
       console.error("Error starting twenty 9 game.");

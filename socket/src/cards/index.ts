@@ -595,4 +595,3 @@ export default cardItems;
 
 export * from "./utils/get29GameCards";
 export * from "./utils/getCards";
-export * from "./utils/sortCards";

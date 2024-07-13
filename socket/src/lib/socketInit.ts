@@ -10,6 +10,7 @@ import {
   onSocketConnect,
   onSocketDisconnect,
   startTwenty9game,
+  twenty9Bid,
 } from "../handlers";
 
 export default function socketInit(server: Server) {
@@ -61,5 +62,8 @@ export default function socketInit(server: Server) {
       SocketEvent.STARTTWENTY9GAME,
       startTwenty9game.bind({ socket, io })
     );
+
+    //  start twenty9 game bid by player //
+    socket.on(SocketEvent.TWENTY9BID, twenty9Bid.bind({ socket, io }));
   });
 }

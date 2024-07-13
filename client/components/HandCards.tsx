@@ -1,6 +1,6 @@
 import { ICard } from "@/@types/card";
-import sortCards from "@/cards/utils/sortCards";
 import usePageSize from "@/hooks/usePageSize";
+import sortCards from "@/utils/sortCards";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import Card from "./Card";
@@ -31,7 +31,7 @@ function HandCards({
 
   return (
     <div
-      className="absolute bottom-0 flex h-56 w-full max-w-[1024px] justify-center py-8 md:h-72 lg:left-[calc(50%-512px)]"
+      className="absolute bottom-0 flex h-56 w-full max-w-[1024px] justify-center py-8 md:h-56 lg:left-[calc(50%-32rem)]"
       style={{
         transform: "translate-3d(-50%, 0,0)",
       }}
@@ -62,6 +62,7 @@ function HandCards({
                 Math.min(1.5 * totalCards, 8),
               zIndex: 20 + id * 5,
               x: id * 16,
+              y: 16,
               transition: { duration: 0.5 },
             }}
             style={{ transformOrigin: "bottom left" }}
@@ -69,7 +70,7 @@ function HandCards({
               x: 0,
               y: -((pageHeight - 56) / 2),
               rotate: 0,
-              scale: 0.64,
+              scale: 0.75,
             }}
             onClick={() => handleCardClick(card)}
           >

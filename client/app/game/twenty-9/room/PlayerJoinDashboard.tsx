@@ -1,7 +1,7 @@
 "use client";
 
 import { RoomType } from "@/@types/socket";
-import RoomPlayerCard from "@/components/RoomPlayerCard";
+import PlayerRoomJoinPoster from "@/components/PlayerRoomJoinPoster";
 import { Button } from "@/components/ui/button";
 import { TypographyH2, TypographyH4 } from "@/components/ui/typography";
 import useSocket from "@/hooks/useSocket";
@@ -33,10 +33,10 @@ function PlayerJoinDashboard({
       <div className="flex flex-wrap justify-center gap-4 pb-16 pt-20">
         <AnimatePresence>
           {room.players.map((player) => (
-            <RoomPlayerCard key={player.clerkId} player={player} />
+            <PlayerRoomJoinPoster key={player.clerkId} player={player} />
           ))}
           {Array.from({ length: 4 - room.players.length }).map((i, id) => (
-            <RoomPlayerCard key={id} />
+            <PlayerRoomJoinPoster key={id} />
           ))}
         </AnimatePresence>
       </div>

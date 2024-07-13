@@ -64,7 +64,7 @@ export default async function joinTwenty9Room(
         }
 
         if (room && (isEmptySpotPresent || isAlreadyInRoom)) {
-          socket.join(room._id.toString());
+          socket.join(room.roomCode);
 
           io.to(session.id).emit(
             SocketEvent.ROOMJOIN,
@@ -76,7 +76,7 @@ export default async function joinTwenty9Room(
             },
             () => {
               // Emit PLAYERSINROOM event after ROOMJOIN event is acknowledged
-              io.to(room!._id.toString()).emit(
+              io.to(room!.roomCode).emit(
                 SocketEvent.PLAYERSINROOM,
                 room!.players
               );

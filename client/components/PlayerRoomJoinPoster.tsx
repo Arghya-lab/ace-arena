@@ -11,7 +11,7 @@ import {
   TypographySmall,
 } from "./ui/typography";
 
-function RoomPlayerCard({ player }: { player?: IPlayer }) {
+function PlayerRoomJoinPoster({ player }: { player?: IPlayer }) {
   const { addPlayerToAdminTeam_twenty9Room, room } = useSocket();
   if (!room) return null;
 
@@ -39,7 +39,7 @@ function RoomPlayerCard({ player }: { player?: IPlayer }) {
           <TypographySmall className="pb-3">
             Team: {player.teamId}
           </TypographySmall>
-          {room.isRoomAdmin &&
+          {room.isMeRoomAdmin &&
             room.players.length === 4 &&
             !player.isRoomAdmin &&
             player.teamId !== "A" && (
@@ -65,4 +65,4 @@ function RoomPlayerCard({ player }: { player?: IPlayer }) {
   );
 }
 
-export default RoomPlayerCard;
+export default PlayerRoomJoinPoster;

@@ -32,10 +32,10 @@ export default async function leaveTwenty9Room(
             await Twenty9Room.findByIdAndDelete(room._id);
           }
 
-          socket.leave(room._id.toString());
+          socket.leave(room.roomCode);
           io.to(session.id).emit(SocketEvent.ROOMLEAVE);
 
-          io.to(room._id.toString()).emit(
+          io.to(room.roomCode).emit(
             SocketEvent.PLAYERSINROOM,
             updatedRoom.players
           );
