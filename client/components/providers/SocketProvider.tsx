@@ -1,21 +1,22 @@
 "use client";
 
+import { RoomType } from "@/@types/context";
 import { IPlayer } from "@/@types/game";
 import {
   CreateTwenty9RoomFormSchemaType,
   JoinTwenty9RoomFormSchemaType,
 } from "@/@types/schema";
-import { RoomType, SocketEvent, SocketUser } from "@/@types/socket";
-import SocketContext from "@/context/SocketContext";
-import {
-  clearSocketListeners,
-  handleSocketEvents,
-  initializeSocket,
-} from "@/services/socket";
+import { SocketEvent, SocketUser } from "@/@types/socket";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 import { Socket } from "socket.io-client";
+import SocketContext from "../../context/SocketContext";
+import {
+  clearSocketListeners,
+  handleSocketEvents,
+  initializeSocket,
+} from "../../services/socket";
 
 export default function SocketProvider({
   children,
@@ -65,7 +66,7 @@ export default function SocketProvider({
   const createTwenty9Room = useCallback(
     (data: CreateTwenty9RoomFormSchemaType) => {
       if (socket && socketUser) {
-        socket.emit(SocketEvent.CREATETWENTY9ROOM, data);
+        socket.emit(SocketEvent.CREATE_TWENTY9_ROOM, data);
       }
     },
     [socket, socketUser]
@@ -74,7 +75,7 @@ export default function SocketProvider({
   const joinTwenty9Room = useCallback(
     (data: JoinTwenty9RoomFormSchemaType) => {
       if (socket && socketUser) {
-        socket.emit(SocketEvent.JOINTWENTY9ROOM, data);
+        socket.emit(SocketEvent.JOIN_TWENTY9_ROOM, data);
       }
     },
     [socket, socketUser]
@@ -82,13 +83,13 @@ export default function SocketProvider({
 
   const leaveTwenty9Room = useCallback(() => {
     if (socket && room) {
-      socket.emit(SocketEvent.LEAVETWENTY9ROOM, { roomCode: room.roomCode });
+      socket.emit(SocketEvent.LEAVE_TWENTY9_ROOM, { roomCode: room.roomCode });
     }
   }, [socket, room]);
 
   const deleteTwenty9Room = useCallback(() => {
     if (socket && room && room.isMeRoomAdmin) {
-      socket.emit(SocketEvent.DELETETWENTY9ROOM, { roomCode: room.roomCode });
+      socket.emit(SocketEvent.DELETE_TWENTY9_ROOM, { roomCode: room.roomCode });
     }
   }, [socket, room]);
 
@@ -101,7 +102,7 @@ export default function SocketProvider({
         room.isMeRoomAdmin &&
         room.players.length === 4
       ) {
-        socket.emit(SocketEvent.ADDPLAYERTOADMINTEAM_TWENTY9ROOM, {
+        socket.emit(SocketEvent.ADD_PLAYER_TO_ADMIN_TEAM_TWENTY9_ROOM, {
           roomCode: room.roomCode,
           player,
         });

@@ -6,6 +6,9 @@
     "CREATETWENTY",
     "DELETETWENTY",
     "DOTWENTY",
+    "DOUBLECHALLENGE",
+    "DOUBLEREDOUBLECHANGE",
+    "FINALTWENTY",
     "JOINTWENTY",
     "LEAVETWENTY",
     "nextjs",
@@ -13,12 +16,14 @@
     "PLAYERSINROOM",
     "PLAYERSJOINED",
     "raleway",
+    "REDOUBLECHALLENGE",
     "ROOMCODE",
     "ROOMJOIN",
     "ROOMJOINED",
     "ROOMLEAVE",
     "SHOWOFFLINE",
     "SHOWONLINE",
-    "Signin"
+    "Signin",
+    "TRUMPSUITESELECT"
   ]
 }

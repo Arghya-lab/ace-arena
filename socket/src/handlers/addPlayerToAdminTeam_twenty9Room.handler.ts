@@ -49,7 +49,7 @@ export default async function addPlayerToAdminTeam_twenty9Room(
           ];
           await room.save();
 
-          io.to(room.roomCode).emit(SocketEvent.PLAYERSINROOM, room.players);
+          io.to(room.roomCode).emit(SocketEvent.PLAYERS_IN_ROOM, room.players);
         }
       }
     } catch (error) {

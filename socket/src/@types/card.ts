@@ -44,3 +44,9 @@ export type ICardCounts = [
   { playerId: 3; count: number },
   { playerId: 4; count: number }
 ];
+
+export enum SeventhCardEnum {
+  SEVENTH = "Seventh",
+}
+
+export type TrumpOptionsEnum = SuitsEnum | SeventhCardEnum;

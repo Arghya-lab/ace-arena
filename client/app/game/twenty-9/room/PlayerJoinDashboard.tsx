@@ -1,6 +1,5 @@
 "use client";
 
-import { RoomType } from "@/@types/socket";
 import PlayerRoomJoinPoster from "@/components/PlayerRoomJoinPoster";
 import { Button } from "@/components/ui/button";
 import { TypographyH2, TypographyH4 } from "@/components/ui/typography";
@@ -8,15 +7,14 @@ import useSocket from "@/hooks/useSocket";
 import cn from "@/utils/cn";
 import { AnimatePresence } from "framer-motion";
 import { LogOut, SquarePlay, Trash2 } from "lucide-react";
+import { useTwenty9RoomState } from "./Twenty9RoomProvider";
 
-function PlayerJoinDashboard({
-  room,
-  startTwenty9Game,
-}: {
-  room: RoomType;
-  startTwenty9Game: () => any;
-}) {
-  const { leaveTwenty9Room, deleteTwenty9Room } = useSocket();
+function PlayerJoinDashboard() {
+  const { leaveTwenty9Room, deleteTwenty9Room, room } = useSocket();
+  const { startTwenty9Game } = useTwenty9RoomState();
+
+  if (!room) return null;
+
   return (
     <div className="h-[calc(100dvh-56px)] min-h-[560px] overflow-y-auto p-4">
       <TypographyH2 className="py-4 text-center">

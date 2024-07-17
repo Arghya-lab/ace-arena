@@ -33,10 +33,10 @@ export default async function leaveTwenty9Room(
           }
 
           socket.leave(room.roomCode);
-          io.to(session.id).emit(SocketEvent.ROOMLEAVE);
+          io.to(session.id).emit(SocketEvent.ROOM_LEAVE);
 
           io.to(room.roomCode).emit(
-            SocketEvent.PLAYERSINROOM,
+            SocketEvent.PLAYERS_IN_ROOM,
             updatedRoom.players
           );
         }

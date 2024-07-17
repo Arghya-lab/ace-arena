@@ -1,9 +1,9 @@
+import { SocketContextType } from "@/@types/context";
 import { IPlayer } from "@/@types/game";
 import {
   CreateTwenty9RoomFormSchemaType,
   JoinTwenty9RoomFormSchemaType,
 } from "@/@types/schema";
-import { SocketContextType } from "@/@types/socket";
 import { createContext } from "react";
 
 const SocketContext = createContext<SocketContextType>({

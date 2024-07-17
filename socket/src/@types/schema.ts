@@ -1,4 +1,4 @@
-import { IPlayerCards } from "./card";
+import { IPlayerCards, SuitsEnum, TrumpOptionsEnum } from "./card";
 
 export interface IUserSchema {
   clerkId: string;
@@ -22,6 +22,12 @@ export interface ITwenty9RoomSchema {
   highestBidderId: 1 | 2 | 3 | 4 | null;
   totalParticipateBidder: number;
   isBidPassEnable: boolean;
+  doubleChallengeBy: IUserSchema[];
+  doubleChallengeEvaluated: 0 | 1 | 2;
+  isDouble: boolean;
+  isRedouble: boolean;
+  trumpSuit: TrumpOptionsEnum | null;
+  isTrumpSuitRevealed: boolean;
   cardDistributions: IPlayerCards[];
   gamePhase:
     | "uninitialized" //  game not started

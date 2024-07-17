@@ -3,7 +3,7 @@ import { chunk, difference, differenceBy, random, shuffle } from "lodash";
 import cards from "..";
 import weightedRandomPicker from "../../utils/weightedRandomPicker";
 
-export function get29Game1stHandCards(): IPlayerCards[] {
+export function get29Game1stPhaseCards(): IPlayerCards[] {
   let left29GameCards: ICard[] = shuffle(
     cards.filter((card) => card.isValid29GameCard)
   );
@@ -15,18 +15,18 @@ export function get29Game1stHandCards(): IPlayerCards[] {
   2nd Team = 2nd, 4th player
   */
 
-  const is1stLuckyTeam = weightedRandomPicker([2 / 3, 1 / 3]) === 1;
-  const is2ndLuckyTeam = weightedRandomPicker([2 / 3, 1 / 3]) === 1;
+  const is1stTeamLucky = weightedRandomPicker([2 / 3, 1 / 3]) === 1;
+  const is2ndTeamLucky = weightedRandomPicker([2 / 3, 1 / 3]) === 1;
 
-  const is1stLuckyPlayer = is1stLuckyTeam ? !!random(1) : false;
-  const is3rdLuckyPlayer = is1stLuckyTeam
-    ? is1stLuckyPlayer
+  const is1stPlayerLucky = is1stTeamLucky ? !!random(1) : false;
+  const is3rdPlayerLucky = is1stTeamLucky
+    ? is1stPlayerLucky
       ? false
       : true
     : false;
-  const is2ndLuckyPlayer = is2ndLuckyTeam ? !!random(1) : false;
-  const is4thLuckyPlayer = is2ndLuckyTeam
-    ? is2ndLuckyPlayer
+  const is2ndPlayerLucky = is2ndTeamLucky ? !!random(1) : false;
+  const is4thPlayerLucky = is2ndTeamLucky
+    ? is2ndPlayerLucky
       ? false
       : true
     : false;
@@ -62,10 +62,10 @@ export function get29Game1stHandCards(): IPlayerCards[] {
     return shuffle(playerCards);
   }
 
-  if (is1stLuckyPlayer) _1stPlayerCards = createLuckyPlayerDeck();
-  if (is2ndLuckyPlayer) _2ndPlayerCards = createLuckyPlayerDeck();
-  if (is3rdLuckyPlayer) _3rdPlayerCards = createLuckyPlayerDeck();
-  if (is4thLuckyPlayer) _4thPlayerCards = createLuckyPlayerDeck();
+  if (is1stPlayerLucky) _1stPlayerCards = createLuckyPlayerDeck();
+  if (is2ndPlayerLucky) _2ndPlayerCards = createLuckyPlayerDeck();
+  if (is3rdPlayerLucky) _3rdPlayerCards = createLuckyPlayerDeck();
+  if (is4thPlayerLucky) _4thPlayerCards = createLuckyPlayerDeck();
 
   return [
     {
@@ -87,9 +87,7 @@ export function get29Game1stHandCards(): IPlayerCards[] {
   ];
 }
 
-export function get29Game2ndHandCards(
-  _1stHand: IPlayerCards[]
-): IPlayerCards[] {
+export function get29GameCards(_1stHand: IPlayerCards[]): IPlayerCards[] {
   let left29GameCards: ICard[] = shuffle(
     differenceBy(
       cards.filter((card) => card.isValid29GameCard),
@@ -188,19 +186,31 @@ export function get29Game2ndHandCards(
   return [
     {
       playerId: 1,
-      cards: _1stPlayerCards || createUnluckyPlayerDeck(),
+      cards: [
+        ...(_1stHand.find((deck) => deck.playerId === 1) as IPlayerCards).cards,
+        ...(_1stPlayerCards || createUnluckyPlayerDeck()),
+      ],
     },
     {
       playerId: 2,
-      cards: _2ndPlayerCards || createUnluckyPlayerDeck(),
+      cards: [
+        ...(_1stHand.find((deck) => deck.playerId === 2) as IPlayerCards).cards,
+        ...(_2ndPlayerCards || createUnluckyPlayerDeck()),
+      ],
     },
     {
       playerId: 3,
-      cards: _3rdPlayerCards || createUnluckyPlayerDeck(),
+      cards: [
+        ...(_1stHand.find((deck) => deck.playerId === 3) as IPlayerCards).cards,
+        ...(_3rdPlayerCards || createUnluckyPlayerDeck()),
+      ],
     },
     {
       playerId: 4,
-      cards: _4thPlayerCards || createUnluckyPlayerDeck(),
+      cards: [
+        ...(_1stHand.find((deck) => deck.playerId === 4) as IPlayerCards).cards,
+        ...(_4thPlayerCards || createUnluckyPlayerDeck()),
+      ],
     },
   ];
 }

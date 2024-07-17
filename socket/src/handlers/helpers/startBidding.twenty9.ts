@@ -24,7 +24,7 @@ export default async function startBidding(
     room.totalParticipateBidder = 2;
     await room.save();
 
-    io.to(firstBidder.clerkId).emit(SocketEvent.DOTWENTY9BID, {
+    io.to(firstBidder.clerkId).emit(SocketEvent.DO_TWENTY9_BID, {
       availableBids: room.getAvailableBids({ isFirstBidder: true }),
     });
   }

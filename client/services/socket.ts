@@ -1,7 +1,8 @@
 "client only";
 
+import { RoomType } from "@/@types/context";
 import { GameEnum, IPlayer } from "@/@types/game";
-import { RoomType, SocketEvent, SocketUser } from "@/@types/socket";
+import { SocketEvent, SocketUser } from "@/@types/socket";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { Dispatch, SetStateAction } from "react";
 import { io, Socket } from "socket.io-client";
@@ -64,15 +65,15 @@ export function handleSocketEvents(
 
   socket.on("connect", onConnect);
   socket.on("disconnect", onDisconnect);
-  socket.on(SocketEvent.ROOMJOIN, onRoomJoin);
-  socket.on(SocketEvent.ROOMLEAVE, onRoomLeave);
-  socket.on(SocketEvent.PLAYERSINROOM, onPlayersInRoom);
+  socket.on(SocketEvent.ROOM_JOIN, onRoomJoin);
+  socket.on(SocketEvent.ROOM_LEAVE, onRoomLeave);
+  socket.on(SocketEvent.PLAYERS_IN_ROOM, onPlayersInRoom);
 }
 
 export function clearSocketListeners(socket: Socket) {
   socket.off("connect");
   socket.off("disconnect");
-  socket.off(SocketEvent.ROOMJOIN);
-  socket.off(SocketEvent.ROOMLEAVE);
-  socket.off(SocketEvent.PLAYERSINROOM);
+  socket.off(SocketEvent.ROOM_JOIN);
+  socket.off(SocketEvent.ROOM_LEAVE);
+  socket.off(SocketEvent.PLAYERS_IN_ROOM);
 }

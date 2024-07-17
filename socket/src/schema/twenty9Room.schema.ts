@@ -10,6 +10,7 @@ const twenty9RoomSchema = new Schema<ITwenty9RoomDocument>({
     type: String,
     required: true,
     unique: true,
+    index: true,
   },
   isTeamGame: {
     type: Boolean,
@@ -45,6 +46,31 @@ const twenty9RoomSchema = new Schema<ITwenty9RoomDocument>({
     default: 0,
   },
   isBidPassEnable: {
+    type: Boolean,
+    default: false,
+  },
+  doubleChallengeBy: {
+    type: [userSchema],
+    default: [],
+  },
+  doubleChallengeEvaluated: {
+    type: Number,
+    enum: [0, 1, 2],
+    default: 0,
+  },
+  isDouble: {
+    type: Boolean,
+    default: false,
+  },
+  isRedouble: {
+    type: Boolean,
+    default: false,
+  },
+  trumpSuit: {
+    type: String,
+    default: null,
+  },
+  isTrumpSuitRevealed: {
     type: Boolean,
     default: false,
   },

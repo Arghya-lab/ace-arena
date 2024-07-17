@@ -7,6 +7,9 @@ import deleteTwenty9Room from "./deleteTwenty9Room.handler";
 import addPlayerToAdminTeam_twenty9Room from "./addPlayerToAdminTeam_twenty9Room.handler";
 import startTwenty9game from "./startTwenty9game.handler";
 import twenty9Bid from "./twenty9Bid.handler";
+import doubleChallenge from "./doubleChallenge.handler";
+import redoubleChallenge from "./redoubleChallenge.handler";
+import trumpSuiteSelect from "./trumpSuiteSelect.handler";
 
 export {
   onSocketConnect,
@@ -18,4 +21,7 @@ export {
   addPlayerToAdminTeam_twenty9Room,
   startTwenty9game,
   twenty9Bid,
+  doubleChallenge,
+  redoubleChallenge,
+  trumpSuiteSelect,
 };

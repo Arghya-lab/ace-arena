@@ -1,14 +1,14 @@
 import { Server } from "socket.io";
 import { ICard, ICardCounts } from "../../@types/card";
 import { SocketEvent } from "../../@types/socket";
-import { get29Game1stHandCards } from "../../cards";
 import { ITwenty9RoomDocument } from "../../schema/twenty9Room.schema";
+import { get29Game1stPhaseCards } from "../../cards";
 
 export default async function distributeFirstPhaseCards(
   room: ITwenty9RoomDocument,
   io: Server
 ) {
-  room.cardDistributions = get29Game1stHandCards();
+  room.cardDistributions = get29Game1stPhaseCards();
   room.gamePhase = "firstPhaseCardsDistributed";
   await room.save();
 
@@ -33,6 +33,6 @@ export default async function distributeFirstPhaseCards(
       ],
     };
 
-    io.to(player.clerkId).emit(SocketEvent.TWENTY9FIRSTHAND, data);
+    io.to(player.clerkId).emit(SocketEvent.TWENTY9_FIRST_PHASE_CARDS, data);
   });
 }

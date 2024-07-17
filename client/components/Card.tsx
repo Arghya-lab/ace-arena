@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { TypographyP } from "./ui/typography";
 
-function Card({ card }: { card?: ICard }) {
+function Card({ card, className }: { card?: ICard; className?: string }) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isError, setIsError] = useState(false);
 
@@ -15,7 +15,8 @@ function Card({ card }: { card?: ICard }) {
     <div
       className={cn(
         "relative aspect-[13/20] w-36 rounded-xl",
-        !card && "m-8 flex items-center justify-center border border-[#d19f4e]"
+        !card && "m-8 flex items-center justify-center border border-[#d19f4e]",
+        className
       )}
       style={{
         backgroundImage: !card

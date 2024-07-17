@@ -1,6 +1,7 @@
 import { Server } from "socket.io";
 import { SessionSocket, SocketEvent } from "../@types/socket";
 import Twenty9Room from "../models/Twenty9Room.model";
+import selectTrumpSuite from "./helpers/selectTrumpSuite.twenty9";
 
 export default async function twenty9Bid(
   this: { socket: SessionSocket; io: Server },
@@ -19,7 +20,12 @@ export default async function twenty9Bid(
         "players.clerkId": session.id,
       });
 
-      if (room && room.firstBidder && room.secondBidder) {
+      if (
+        room &&
+        room.firstBidder &&
+        room.secondBidder &&
+        room.gamePhase === "firstPhaseCardsDistributed"
+      ) {
         room.isBidPassEnable = true;
 
         if (payload.bid === "pass") {
@@ -39,19 +45,16 @@ export default async function twenty9Bid(
 
           await room.save();
           if (room.totalParticipateBidder <= 4) {
-            io.to(room.secondBidder!.clerkId).emit(SocketEvent.DOTWENTY9BID, {
+            io.to(room.secondBidder!.clerkId).emit(SocketEvent.DO_TWENTY9_BID, {
               availableBids: room.getAvailableBids(),
             });
           } else {
             room.totalParticipateBidder = 4;
+            room.firstBidder = undefined;
+            room.secondBidder = undefined;
             room.gamePhase = "bided";
-            await room.save();
 
-            console.log({
-              highestBid: room.highestBid,
-              highestBidder: room.highestBidderId,
-            });
-            // handle double re-double =>=> bid winner select trump suite =>=> distribute second phase cards
+            await room.save();
           }
         } else if (
           payload.bid > room.highestBid ||
@@ -64,14 +67,14 @@ export default async function twenty9Bid(
             room.highestBidderId = room.firstBidder.playerId;
 
             await room.save();
-            io.to(room.secondBidder.clerkId).emit(SocketEvent.DOTWENTY9BID, {
+            io.to(room.secondBidder.clerkId).emit(SocketEvent.DO_TWENTY9_BID, {
               availableBids: room.getAvailableBids(),
             });
           } else if (session.id === room.secondBidder.clerkId) {
             room.highestBidderId = room.secondBidder.playerId;
 
             await room.save();
-            io.to(room.firstBidder.clerkId).emit(SocketEvent.DOTWENTY9BID, {
+            io.to(room.firstBidder.clerkId).emit(SocketEvent.DO_TWENTY9_BID, {
               availableBids: room.getAvailableBids({ isFirstBidder: true }),
             });
           }
@@ -84,10 +87,30 @@ export default async function twenty9Bid(
         );
 
         if (highestBidder) {
-          io.to(room.roomCode).emit(SocketEvent.TWENTY9BIDCHANGE, {
+          io.to(room.roomCode).emit(SocketEvent.TWENTY9_BID_CHANGE, {
             highestBid: room.highestBid,
             highestBidder,
           });
+
+          if (room.gamePhase === "bided" && room.isDoubleRedoubleEnable) {
+            //  if the game phase is bided & double redouble enable then emit `DOTWENTY9DOUBLECHALLENGE` event to bid winner opposition players
+            const bidWinnerOppPlrRooms = room.players
+              .filter((player) => player.teamId !== highestBidder.teamId)
+              .map((player) => player.clerkId);
+
+            io.to(bidWinnerOppPlrRooms).emit(
+              SocketEvent.DO_TWENTY9_DOUBLE_CHALLENGE,
+              { options: ["double", "pass"] }
+            );
+          } else if (
+            room.gamePhase === "bided" &&
+            !room.isDoubleRedoubleEnable
+          ) {
+            //  if the game phase is bided but double redouble disable then emit event to bid winner for trump suite select
+            await selectTrumpSuite(room, io);
+          }
+        } else {
+          console.log("Error occur getting highest bidder.");
         }
       }
     } catch {

@@ -43,7 +43,7 @@ export default async function createTwenty9Room(
       socket.join(newRoom.roomCode);
 
       this.io.to(session.id).emit(
-        SocketEvent.ROOMJOIN,
+        SocketEvent.ROOM_JOIN,
         {
           gameType: GameEnum.TWENTY9,
           roomCode: newRoom.roomCode,
@@ -53,7 +53,7 @@ export default async function createTwenty9Room(
         () => {
           // Emit PLAYERSINROOM event after ROOMJOIN event is acknowledged
           io.to(newRoom.roomCode).emit(
-            SocketEvent.PLAYERSINROOM,
+            SocketEvent.PLAYERS_IN_ROOM,
             newRoom.players
           );
         }
