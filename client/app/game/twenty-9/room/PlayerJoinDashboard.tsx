@@ -4,7 +4,7 @@ import PlayerRoomJoinPoster from "@/components/PlayerRoomJoinPoster";
 import { Button } from "@/components/ui/button";
 import { TypographyH2, TypographyH4 } from "@/components/ui/typography";
 import useSocket from "@/hooks/useSocket";
-import cn from "@/utils/cn";
+import { cn } from "@/utils/cn";
 import { AnimatePresence } from "framer-motion";
 import { LogOut, SquarePlay, Trash2 } from "lucide-react";
 import { useTwenty9RoomState } from "./Twenty9RoomProvider";

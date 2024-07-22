@@ -2,6 +2,7 @@ import { Server } from "socket.io";
 import { SessionSocket, SocketEvent } from "../@types/socket";
 import Twenty9Room from "../models/Twenty9Room.model";
 import selectTrumpSuite from "./helpers/selectTrumpSuite.twenty9";
+import sendNotification from "./helpers/sendNotification.main";
 
 export default async function twenty9Bid(
   this: { socket: SessionSocket; io: Server },
@@ -27,6 +28,15 @@ export default async function twenty9Bid(
         room.gamePhase === "firstPhaseCardsDistributed"
       ) {
         room.isBidPassEnable = true;
+        sendNotification({
+          io,
+          socketRooms: room.roomCode,
+          type: "Twenty9_Bid",
+          message:
+            payload.bid === "pass"
+              ? `${session.name} pass the bid.`
+              : `${session.name} bided for ${payload.bid}.`,
+        });
 
         if (payload.bid === "pass") {
           if (session.id === room.firstBidder.clerkId) {
@@ -91,6 +101,12 @@ export default async function twenty9Bid(
             highestBid: room.highestBid,
             highestBidder,
           });
+          sendNotification({
+            io,
+            socketRooms: room.roomCode,
+            type: "Twenty9_Bid_winner",
+            message: `Twenty 9 bid winner is ${highestBidder.name}.`,
+          });
 
           if (room.gamePhase === "bided" && room.isDoubleRedoubleEnable) {
             //  if the game phase is bided & double redouble enable then emit `DOTWENTY9DOUBLECHALLENGE` event to bid winner opposition players
@@ -102,6 +118,17 @@ export default async function twenty9Bid(
               SocketEvent.DO_TWENTY9_DOUBLE_CHALLENGE,
               { options: ["double", "pass"] }
             );
+
+            const bidWinnerOppPlrNames = room.players
+              .filter((player) => player.teamId !== highestBidder.teamId)
+              .map((player) => player.name)
+              .join(", ");
+            sendNotification({
+              io,
+              socketRooms: room.roomCode,
+              type: "Twenty9_Double_considering",
+              message: `${bidWinnerOppPlrNames} considering for double challenge.`,
+            });
           } else if (
             room.gamePhase === "bided" &&
             !room.isDoubleRedoubleEnable
@@ -110,7 +137,12 @@ export default async function twenty9Bid(
             await selectTrumpSuite(room, io);
           }
         } else {
-          console.log("Error occur getting highest bidder.");
+          sendNotification({
+            io,
+            socketRooms: room.roomCode,
+            type: "Error",
+            message: "Error occur getting bid winner in server.",
+          });
         }
       }
     } catch {

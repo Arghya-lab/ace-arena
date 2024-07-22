@@ -1,12 +1,13 @@
-import { Server } from "socket.io";
-import { ITwenty9RoomDocument } from "../../schema/twenty9Room.schema";
-import { SocketEvent } from "../../@types/socket";
 import { shuffle } from "lodash";
+import { Server } from "socket.io";
 import {
   SeventhCardEnum,
   SuitsEnum,
   TrumpOptionsEnum,
 } from "../../@types/card";
+import { SocketEvent } from "../../@types/socket";
+import { ITwenty9RoomDocument } from "../../schema/twenty9Room.schema";
+import sendNotification from "./sendNotification.main";
 
 export default async function selectTrumpSuite(
   room: ITwenty9RoomDocument,
@@ -17,7 +18,6 @@ export default async function selectTrumpSuite(
   const highestBidder = room.players.find(
     (player) => player.playerId === room.highestBidderId
   );
-
   const suiteOptions: TrumpOptionsEnum[] = shuffle(Object.values(SuitsEnum));
 
   if (highestBidder) {
@@ -32,7 +32,19 @@ export default async function selectTrumpSuite(
         suiteOptions,
       }
     );
+
+    sendNotification({
+      io,
+      socketRooms: room.roomCode,
+      type: "Twenty9_Trump_Suit_selection",
+      message: `Trump suit selecting by ${highestBidder.name}.`,
+    });
   } else {
-    console.log("Error occur : highestBidder not found.");
+    sendNotification({
+      io,
+      socketRooms: room.roomCode,
+      type: "Error",
+      message: "Error occur : highestBidder not found.",
+    });
   }
 }

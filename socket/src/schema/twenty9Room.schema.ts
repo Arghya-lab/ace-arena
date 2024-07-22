@@ -1,7 +1,7 @@
 import { Document, Schema } from "mongoose";
 import { ITwenty9RoomSchema } from "../@types/schema";
-import userSchema from "./user.schema";
 import cardSchema from "./card.schema";
+import userSchema from "./user.schema";
 
 export interface ITwenty9RoomDocument extends ITwenty9RoomSchema, Document {}
 

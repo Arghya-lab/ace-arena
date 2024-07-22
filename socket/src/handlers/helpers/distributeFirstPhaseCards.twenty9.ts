@@ -1,8 +1,8 @@
 import { Server } from "socket.io";
 import { ICard, ICardCounts } from "../../@types/card";
 import { SocketEvent } from "../../@types/socket";
-import { ITwenty9RoomDocument } from "../../schema/twenty9Room.schema";
 import { get29Game1stPhaseCards } from "../../cards";
+import { ITwenty9RoomDocument } from "../../schema/twenty9Room.schema";
 
 export default async function distributeFirstPhaseCards(
   room: ITwenty9RoomDocument,

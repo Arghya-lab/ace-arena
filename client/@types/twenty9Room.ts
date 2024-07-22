@@ -113,7 +113,7 @@ interface SetTrumpSuitActionType {
 }
 interface UserTrumpSelectActionType {
   type: "userTrumpSelect";
-  payload: {trumpSuit: TrumpOptionsEnum}
+  payload: { trumpSuit: TrumpOptionsEnum };
 }
 
 export type Twenty9RoomActionType =

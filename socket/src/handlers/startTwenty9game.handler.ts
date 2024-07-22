@@ -25,7 +25,7 @@ export default async function startTwenty9game(
       if (room) {
         await distributeFirstPhaseCards(room, io);
 
-        await startBiding(room, io, session);
+        await startBiding(room, io);
       }
     } catch (error) {
       console.error("Error starting twenty 9 game.");

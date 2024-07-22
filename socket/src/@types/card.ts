@@ -42,7 +42,7 @@ export type ICardCounts = [
   { playerId: 1; count: number },
   { playerId: 2; count: number },
   { playerId: 3; count: number },
-  { playerId: 4; count: number }
+  { playerId: 4; count: number },
 ];
 
 export enum SeventhCardEnum {

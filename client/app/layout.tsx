@@ -1,6 +1,8 @@
+import { AudioProvider } from "@/components/providers/AudioProvider";
 import SocketProvider from "@/components/providers/SocketProvider";
 import ThemeProvider from "@/components/providers/ThemeProvider";
 import TopNavbar from "@/components/TopNavbar";
+import { Toaster } from "@/components/ui/toaster";
 import { mavinPro, patuaOne, raleway } from "@/font";
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata, Viewport } from "next";
@@ -61,12 +63,15 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <SocketProvider>
-              <TopNavbar />
-              <main className="relative h-[calc(100dvh-56px)] min-h-[560px] overflow-hidden">
-                {children}
-              </main>
-            </SocketProvider>
+            <AudioProvider>
+              <SocketProvider>
+                <TopNavbar />
+                <main className="relative h-[calc(100dvh-56px)] min-h-[560px] overflow-hidden">
+                  {children}
+                </main>
+                <Toaster />
+              </SocketProvider>
+            </AudioProvider>
           </ThemeProvider>
         </body>
       </html>

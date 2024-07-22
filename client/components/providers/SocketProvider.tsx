@@ -7,6 +7,7 @@ import {
   JoinTwenty9RoomFormSchemaType,
 } from "@/@types/schema";
 import { SocketEvent, SocketUser } from "@/@types/socket";
+import { useToast } from "@/hooks/useToast";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
@@ -17,6 +18,7 @@ import {
   handleSocketEvents,
   initializeSocket,
 } from "../../services/socket";
+import { useAudio } from "./AudioProvider";
 
 export default function SocketProvider({
   children,
@@ -29,6 +31,8 @@ export default function SocketProvider({
 
   const { user } = useUser();
   const router = useRouter();
+  const { toast } = useToast();
+  const { playAudio } = useAudio();
 
   const socketUser: SocketUser | null = useMemo(() => {
     if (!user) return null;
@@ -52,6 +56,8 @@ export default function SocketProvider({
         setIsConnected,
         setRoom,
         router,
+        toast,
+        playAudio,
       });
       setSocket(_socket);
 
@@ -61,6 +67,7 @@ export default function SocketProvider({
         setSocket(null);
       };
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socketUser, router]);
 
   const createTwenty9Room = useCallback(

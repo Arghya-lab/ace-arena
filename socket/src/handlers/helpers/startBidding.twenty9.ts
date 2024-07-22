@@ -1,12 +1,11 @@
-import { Server } from "socket.io";
-import { ITwenty9RoomDocument } from "../../schema/twenty9Room.schema";
 import { random } from "lodash";
-import { ISocketUser, SocketEvent } from "../../@types/socket";
+import { Server } from "socket.io";
+import { SocketEvent } from "../../@types/socket";
+import { ITwenty9RoomDocument } from "../../schema/twenty9Room.schema";
 
 export default async function startBidding(
   room: ITwenty9RoomDocument,
-  io: Server,
-  session: ISocketUser
+  io: Server
 ) {
   room.cardDistributer = random(1, 4) as 1 | 2 | 3 | 4;
 

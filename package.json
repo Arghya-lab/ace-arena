@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "concurrently \"cd client && npm run dev\" \"cd socket && npm run dev\"",
-    "build": "concurrently \"cd client && npm run build\" \"cd socket && npm run build\""
+    "build": "concurrently \"cd client && npm run build\" \"cd socket && npm run build\"",
+    "format": "concurrently \"cd client && npm run format\" \"cd socket && npm run format\""
   },
   "author": "",
   "license": "ISC",

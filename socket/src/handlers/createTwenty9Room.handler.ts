@@ -1,8 +1,9 @@
+import { Server } from "socket.io";
 import { GameEnum } from "../@types/game";
 import { SessionSocket, SocketEvent } from "../@types/socket";
 import Twenty9Room from "../models/Twenty9Room.model";
 import genRoomCode from "../utils/genRoomCode";
-import { Server } from "socket.io";
+import sendNotification from "./helpers/sendNotification.main";
 
 export default async function createTwenty9Room(
   this: { socket: SessionSocket; io: Server },
@@ -58,6 +59,13 @@ export default async function createTwenty9Room(
           );
         }
       );
+
+      sendNotification({
+        io,
+        socketRooms: newRoom.roomCode,
+        type: "New_Room_Created",
+        message: `New Twenty 9 room created.`,
+      });
     } catch {
       console.error("Error creating room.");
     }

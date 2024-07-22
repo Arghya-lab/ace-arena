@@ -1,7 +1,8 @@
 import { Server } from "socket.io";
-import { SessionSocket, SocketEvent } from "../@types/socket";
 import { IUserSchema } from "../@types/schema";
+import { SessionSocket, SocketEvent } from "../@types/socket";
 import Twenty9Room from "../models/Twenty9Room.model";
+import sendNotification from "./helpers/sendNotification.main";
 
 export default async function addPlayerToAdminTeam_twenty9Room(
   this: { socket: SessionSocket; io: Server },
@@ -50,6 +51,13 @@ export default async function addPlayerToAdminTeam_twenty9Room(
           await room.save();
 
           io.to(room.roomCode).emit(SocketEvent.PLAYERS_IN_ROOM, room.players);
+
+          sendNotification({
+            io,
+            socketRooms: room.roomCode,
+            type: "Join_Admin_Team",
+            message: `${room.players[1].name} joined ${room.players[0].name}\`s team.`,
+          });
         }
       }
     } catch (error) {

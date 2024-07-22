@@ -1,9 +1,9 @@
-import { createServer } from "http";
+import cors from "cors";
 import dotEnv from "dotenv";
 import express from "express";
-import cors from "cors";
-import socketInit from "./lib/socketInit";
+import { createServer } from "http";
 import connectToMongo from "./lib/db";
+import socketInit from "./lib/socketInit";
 import routes from "./router";
 
 dotEnv.config();

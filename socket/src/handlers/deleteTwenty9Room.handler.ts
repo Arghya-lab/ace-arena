@@ -1,6 +1,7 @@
 import { Server } from "socket.io";
 import { SessionSocket, SocketEvent } from "../@types/socket";
 import Twenty9Room from "../models/Twenty9Room.model";
+import sendNotification from "./helpers/sendNotification.main";
 
 export default async function deleteTwenty9Room(
   this: { socket: SessionSocket; io: Server },
@@ -23,9 +24,16 @@ export default async function deleteTwenty9Room(
           io.to(room.players.map((player) => player.clerkId)).emit(
             SocketEvent.ROOM_LEAVE
           );
+
+          sendNotification({
+            io,
+            socketRooms: room.players.map((player) => player.clerkId),
+            type: "Room_Deleted",
+            message: `Twenty 9 room deleted.`,
+          });
         });
       }
-    } catch (error) {
+    } catch {
       console.error("Error deleting room.");
     }
   }

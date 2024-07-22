@@ -1,7 +1,7 @@
 "use client";
 
 import useSocket from "@/hooks/useSocket";
-import cn from "@/utils/cn";
+import { cn } from "@/utils/cn";
 
 export default function SocketConnectSignal() {
   const { isConnected } = useSocket();

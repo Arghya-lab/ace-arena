@@ -1,6 +1,6 @@
 "use client";
 
-import cn from "@/utils/cn";
+import { cn } from "@/utils/cn";
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import {
   CheckIcon,

@@ -2,6 +2,7 @@ import { Server } from "socket.io";
 import { SessionSocket, SocketEvent } from "../@types/socket";
 import Twenty9Room from "../models/Twenty9Room.model";
 import selectTrumpSuite from "./helpers/selectTrumpSuite.twenty9";
+import sendNotification from "./helpers/sendNotification.main";
 
 export default async function doubleChallenge(
   this: { socket: SessionSocket; io: Server },
@@ -63,6 +64,13 @@ export default async function doubleChallenge(
           //  if both opposition player emit event for there double challenge plan
           if (room.doubleChallengeEvaluated === 2) {
             if (room.doubleChallengeBy.length === 0) {
+              sendNotification({
+                io,
+                socketRooms: room.roomCode,
+                type: "Twenty9_Double_decision",
+                message: `Double challengers are pass for challenge.`,
+              });
+
               // nobody double challenged so emit event for trump suit select to bid winner
               await selectTrumpSuite(room, io);
             } else {
@@ -74,6 +82,13 @@ export default async function doubleChallenge(
                   options: ["redouble", "pass"],
                 }
               );
+
+              sendNotification({
+                io,
+                socketRooms: room.roomCode,
+                type: "Twenty9_Double_decision",
+                message: `${room.doubleChallengeBy.map((player) => player.name).join(", ")} double challenged & ${highestBidder.name} considering for redouble challenge.`,
+              });
             }
           }
         }

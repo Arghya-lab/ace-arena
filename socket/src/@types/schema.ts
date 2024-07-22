@@ -1,4 +1,4 @@
-import { IPlayerCards, SuitsEnum, TrumpOptionsEnum } from "./card";
+import { IPlayerCards, TrumpOptionsEnum } from "./card";
 
 export interface IUserSchema {
   clerkId: string;

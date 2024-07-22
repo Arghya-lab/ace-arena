@@ -1,8 +1,9 @@
+import { difference } from "lodash";
 import { Server } from "socket.io";
+import { GameEnum } from "../@types/game";
 import { SessionSocket, SocketEvent } from "../@types/socket";
 import Twenty9Room from "../models/Twenty9Room.model";
-import { GameEnum } from "../@types/game";
-import { difference } from "lodash";
+import sendNotification from "./helpers/sendNotification.main";
 
 export default async function joinTwenty9Room(
   this: { socket: SessionSocket; io: Server },
@@ -82,6 +83,23 @@ export default async function joinTwenty9Room(
               );
             }
           );
+
+          const prevPlayersRoomId = room.players
+            .filter((player) => player.clerkId !== session.id)
+            .map((player) => player.clerkId);
+
+          sendNotification({
+            io,
+            socketRooms: prevPlayersRoomId,
+            type: "New_Player_Join",
+            message: `New player ${session.name} join Twenty9 room.`,
+          }); // notification for old players
+          sendNotification({
+            io,
+            socketRooms: session.id,
+            type: "New_Player_Join",
+            message: `You successfully join to ${room.roomCode} Twenty9 room.`,
+          }); // notification for new player
         }
       }
     } catch (error) {

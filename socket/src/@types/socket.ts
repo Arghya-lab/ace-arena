@@ -27,6 +27,7 @@ export enum SocketEvent {
   TWENTY9_TRUMP_SUIT_SELECT = "event:twenty9TrumpSuitSelect",
 
   // server created events
+  NOTIFICATION = "event:notification",
   ROOM_JOIN = "event:roomJoin",
   ROOM_LEAVE = "event:roomLeave",
   PLAYERS_IN_ROOM = "event:playersInRoom",
@@ -40,3 +41,18 @@ export enum SocketEvent {
   TWENTY9_ALL_CARDS = "event:twenty9AllCards",
   TWENTY9_TRUMP_SUIT = "event:twenty9TrumpSuit",
 }
+
+export type NotificationType =
+  | "Error"
+  | "New_Room_Created"
+  | "New_Player_Join"
+  | "Player_leaves_Room"
+  | "Room_Deleted"
+  | "Join_Admin_Team"
+  | "Twenty9_Bid"
+  | "Twenty9_Bid_winner"
+  | "Twenty9_Double_considering"
+  | "Twenty9_Double_decision"
+  | "Twenty9_Redouble_decision"
+  | "Twenty9_Trump_Suit_selection"
+  | "Twenty9_Trump_Suit_selected";

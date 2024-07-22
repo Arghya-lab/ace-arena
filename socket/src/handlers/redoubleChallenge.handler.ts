@@ -2,6 +2,7 @@ import { Server } from "socket.io";
 import { SessionSocket, SocketEvent } from "../@types/socket";
 import Twenty9Room from "../models/Twenty9Room.model";
 import selectTrumpSuite from "./helpers/selectTrumpSuite.twenty9";
+import sendNotification from "./helpers/sendNotification.main";
 
 export default async function redoubleChallenge(
   this: { socket: SessionSocket; io: Server },
@@ -30,6 +31,16 @@ export default async function redoubleChallenge(
         room.highestBidderId &&
         room.isDouble
       ) {
+        sendNotification({
+          io,
+          socketRooms: room.roomCode,
+          type: "Twenty9_Redouble_decision",
+          message:
+            payload === "pass"
+              ? `${session.name} pass the redouble challenge.`
+              : `Redouble challenge by ${session.name}.`,
+        });
+
         if (payload === "redouble") {
           const player = room.players.find(
             (player) => player.clerkId === session.id
@@ -48,8 +59,6 @@ export default async function redoubleChallenge(
               }
             );
           }
-        } else {
-          //  TODO: send message
         }
 
         await selectTrumpSuite(room, io);

@@ -1,6 +1,7 @@
 import { Server } from "socket.io";
 import { SessionSocket, SocketEvent } from "../@types/socket";
 import Twenty9Room from "../models/Twenty9Room.model";
+import sendNotification from "./helpers/sendNotification.main";
 
 export default async function leaveTwenty9Room(
   this: { socket: SessionSocket; io: Server },
@@ -39,6 +40,13 @@ export default async function leaveTwenty9Room(
             SocketEvent.PLAYERS_IN_ROOM,
             updatedRoom.players
           );
+
+          sendNotification({
+            io,
+            socketRooms: room.roomCode,
+            type: "Player_leaves_Room",
+            message: `${session.name} leave Twenty 9 room.`,
+          });
         }
       }
     } catch (error) {

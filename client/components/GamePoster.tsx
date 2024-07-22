@@ -7,7 +7,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import cn from "@/utils/cn";
+import { cn } from "@/utils/cn";
 import Image from "next/image";
 import Link from "next/link";
 import { TypographyH3 } from "./ui/typography";
