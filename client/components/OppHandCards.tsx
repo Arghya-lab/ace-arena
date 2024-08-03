@@ -2,7 +2,7 @@
 
 import { IPlayer } from "@/@types/game";
 import usePageSize from "@/hooks/usePageSize";
-import cn from "@/utils/cn";
+import {cn} from "@/utils/cn";
 import { motion } from "framer-motion";
 import Card from "./Card";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";

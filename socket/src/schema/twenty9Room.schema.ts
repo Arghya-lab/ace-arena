@@ -84,6 +84,21 @@ const twenty9RoomSchema = new Schema<ITwenty9RoomDocument>({
       cards: { type: [cardSchema], required: true },
     },
   ],
+  prevTrickWinnerId: {
+    type: Number,
+    enum: [1, 2, 3, 4],
+    default: null,
+  },
+  currTrickCards: [
+    {
+      playerId: {
+        type: Number,
+        enum: [1, 2, 3, 4],
+        required: true,
+      },
+      card: { type: cardSchema, required: true },
+    },
+  ],
   gamePhase: {
     type: String,
     enum: [
@@ -91,8 +106,8 @@ const twenty9RoomSchema = new Schema<ITwenty9RoomDocument>({
       "firstPhaseCardsDistributed", // first phase cards distributed but not yet bidding started
       "bided", // bided by players and bidding owner and game winning point is known but trump suite is not selected
       "trumpSelected", // trump suite is selected but second phase cards not started distributed
-      "secondPhaseCardsDistributed", // second phase cards distributed but players not stated to lead the trick
-      "initialized", // finally players are leads tricks
+      "secondPhaseCardsDistributed", // second phase cards distributed but finally players are leads tricks
+      "ended", // match is end
     ],
     default: "uninitialized",
   },

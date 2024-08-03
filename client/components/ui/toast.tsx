@@ -78,14 +78,15 @@ const ToastMessage = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof ToastPrimitives.Description>
 >(({ className, ...props }, ref) => {
   console.log(className);
-  
-  return(
-  <ToastPrimitives.Description
-    ref={ref}
-    className={cn("font-raleway text-xs opacity-90 md:text-sm", className)}
-    {...props}
-  />
-)});
+
+  return (
+    <ToastPrimitives.Description
+      ref={ref}
+      className={cn("font-raleway text-xs opacity-90 md:text-sm", className)}
+      {...props}
+    />
+  );
+});
 ToastMessage.displayName = ToastPrimitives.Description.displayName;
 
 type ToastProps = React.ComponentPropsWithoutRef<typeof Toast>;

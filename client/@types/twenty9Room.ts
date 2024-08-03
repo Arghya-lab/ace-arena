@@ -11,8 +11,8 @@ export interface Twenty9RoomStateType {
     | "firstPhaseCardsGot" // first phase cards got but not yet bidding started
     | "bided" // bided by players and bidding winner and game winning point is known but trump suite is not selected
     | "trumpSelected" // trump suite is selected but second phase cards not started got
-    | "secondPhaseCardsGot" // second phase cards got but player not stated to lead the trick
-    | "initialized"; // now players can leads tricks
+    | "secondPhaseCardsGot" // second phase cards got but finally players are leads tricks
+    | "ended"; // match is end
   inHandCards: ICard[];
   cardCounts: ICardCounts | null;
   myPlayerId: 1 | 2 | 3 | 4 | null;
@@ -28,6 +28,8 @@ export interface Twenty9RoomStateType {
   canISelectTrump: boolean;
   trumpOptions: TrumpOptionsEnum[];
   trumpSuit: SuitsEnum | null;
+  playableCardIds: number[];
+  isMyTurn: boolean;
 }
 
 export interface Twenty9RoomContextType extends Twenty9RoomStateType {
@@ -39,6 +41,7 @@ export interface Twenty9RoomContextType extends Twenty9RoomStateType {
     payload: ChallengePayloadType
   ) => void;
   handleSelectTrump: (trumpSuit: TrumpOptionsEnum) => void;
+  onCardClick: (card: ICard) => any
 }
 
 //  reducer action types
@@ -115,6 +118,13 @@ interface UserTrumpSelectActionType {
   type: "userTrumpSelect";
   payload: { trumpSuit: TrumpOptionsEnum };
 }
+interface DoPlayTrickCardActionType {
+  type: "doPlayTrickCard";
+  payload: { playableCardIds: number[] }
+}
+interface PlayedTrickCardActionType {
+  type: "playedTrickCard";
+}
 
 export type Twenty9RoomActionType =
   | FirstPhaseCardsActionType
@@ -129,4 +139,4 @@ export type Twenty9RoomActionType =
   | RemoveChallengeActionType
   | SetAllCardsActionType
   | SetTrumpSuitActionType
-  | UserTrumpSelectActionType;
+  | UserTrumpSelectActionType|DoPlayTrickCardActionType|PlayedTrickCardActionType

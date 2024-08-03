@@ -50,29 +50,31 @@ export function handleSocketEvents(
     type?: NotificationType;
     message: string;
   }) {
-    if(type=== "Error"){
+    if (type === "Error") {
       toast({ message, variant: "error" });
-    }else if(type=== "New_Room_Created" || "New_Player_Join"){
+    } else if (type === "New_Room_Created" || "New_Player_Join") {
       toast({ message, variant: "success" });
       playAudio("player-room-join");
-    }else if(type=== "Player_leaves_Room"){
+    } else if (type === "Player_leaves_Room") {
       toast({ message, variant: "warning" });
       playAudio("player-room-leave");
-    }else if(type=== "Room_Deleted"){
+    } else if (type === "Room_Deleted") {
       toast({ message, variant: "error" });
       playAudio("room-deleted");
-    }else if(type=== "Join_Admin_Team"){
+    } else if (type === "Join_Admin_Team") {
       playAudio("player-room-join");
-    }else if(type=== "Twenty9_Bid"){
-    }else if(type=== "Twenty9_Bid_winner" ||
+    } else if (type === "Twenty9_Bid") {
+    } else if (
+      type === "Twenty9_Bid_winner" ||
       "Twenty9_Double_considering" ||
       "Twenty9_Double_decision" ||
       "Twenty9_Redouble_decision" ||
       "Twenty9_Trump_Suit_selection" ||
-      "Twenty9_Trump_Suit_selected"){
-        toast({ message, variant: "info" });
+      "Twenty9_Trump_Suit_selected"
+    ) {
+      toast({ message, variant: "info" });
     }
-  };
+  }
 
   function onRoomJoin({
     gameType,

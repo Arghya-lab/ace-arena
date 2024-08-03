@@ -10,6 +10,7 @@ import {
   leaveTwenty9Room,
   onSocketConnect,
   onSocketDisconnect,
+  playTrickCard,
   redoubleChallenge,
   startTwenty9game,
   trumpSuiteSelect,
@@ -87,6 +88,10 @@ export default function socketInit(server: Server) {
       trumpSuiteSelect.bind({ socket, io })
     );
 
-    // handle bid winner select trump suite => distribute second phase cards
+    //  twenty9 game re-double challenge by bid winner if opposition is challenge //
+    socket.on(
+      SocketEvent.PLAY_TWENTY9_TRICK_CARD,
+      playTrickCard.bind({ socket, io })
+    );
   });
 }

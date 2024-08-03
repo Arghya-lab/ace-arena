@@ -19,6 +19,7 @@ export enum SocketEvent {
   TWENTY9_DOUBLE_CHALLENGE = "event:twenty9DoubleChallenge",
   TWENTY9_REDOUBLE_CHALLENGE = "event:twenty9RedoubleChallenge",
   TWENTY9_TRUMP_SUIT_SELECT = "event:twenty9TrumpSuitSelect",
+  PLAY_TWENTY9_TRICK_CARD = "event:playTwenty9TrickCard",
 
   // server created events
   NOTIFICATION = "event:notification",
@@ -34,7 +35,10 @@ export enum SocketEvent {
   DO_TWENTY9_TRUMP_SUIT_SELECT = "event:doTwenty9TrumpSuitSelect",
   TWENTY9_ALL_CARDS = "event:twenty9AllCards",
   TWENTY9_TRUMP_SUIT = "event:twenty9TrumpSuit",
+  DO_PLAY_TWENTY9_TRICK_CARD = "event:doPlayTwenty9TrickCard",
+  TWENTY9_TRICK_WINNER = "event:twenty9TrickWinner",
 }
+
 export type NotificationType =
   | "Error"
   | "New_Room_Created"

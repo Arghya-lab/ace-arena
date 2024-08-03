@@ -22,6 +22,9 @@ function Twenty9RoomPage() {
     isRedouble,
     inHandCards,
     trumpSuit,
+    playableCardIds,
+    isMyTurn,
+    onCardClick
   } = useTwenty9RoomState();
 
   if (!room) return null;
@@ -63,7 +66,9 @@ function Twenty9RoomPage() {
           cardCounts={cardCounts}
           players={room.players}
           myPlayerId={myPlayerId}
-          playableCardIds={[]}
+          playableCardIds={playableCardIds}
+          isMyTurn={isMyTurn}
+          onCardClick={onCardClick}
         />
       </div>
     );

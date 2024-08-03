@@ -2,7 +2,7 @@ import { Server } from "socket.io";
 import {
   ICard,
   ICardCounts,
-  IPlayerCards,
+  IPlayerCard,
   SeventhCardEnum,
 } from "../../@types/card";
 import { IUserSchema } from "../../@types/schema";
@@ -16,13 +16,14 @@ export default async function distributeAllTwenty9Cards(
 ) {
   room.cardDistributions = get29GameCards(room.cardDistributions);
   room.gamePhase = "secondPhaseCardsDistributed";
+  room.prevTrickWinnerId = (room.cardDistributer % 4) + 1 as 1 | 2 | 3 | 4;
   await room.save();
 
   room.players.forEach((player) => {
     const playerCards = (
       room.cardDistributions.find(
         (cardDistribution) => cardDistribution.playerId === player.playerId
-      ) as IPlayerCards
+      ) as IPlayerCard
     ).cards;
 
     const data: {
@@ -48,7 +49,7 @@ export default async function distributeAllTwenty9Cards(
     room.trumpSuit = (
       room.cardDistributions.find(
         (deck) => deck.playerId === room.highestBidderId
-      ) as IPlayerCards
+      ) as IPlayerCard
     ).cards[6].suit;
     await room.save();
 
@@ -61,4 +62,17 @@ export default async function distributeAllTwenty9Cards(
       trumpSuit: room.trumpSuit,
     });
   }
+
+  // start of tricks
+  const playerToPlayCard = room.players.find(
+    (player) => player.playerId === room.prevTrickWinnerId
+  ) as IUserSchema;
+  const playableCardIds = (
+    room.cardDistributions.find(
+      (cd) => cd.playerId === playerToPlayCard.playerId
+    ) as IPlayerCard
+  ).cards.map((card) => card.id);
+  io.to(playerToPlayCard.clerkId).emit(SocketEvent.DO_PLAY_TWENTY9_TRICK_CARD, {
+    playableCardIds,
+  });
 }

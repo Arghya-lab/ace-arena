@@ -1,5 +1,5 @@
 import { ICard, SuitsEnum } from "@/@types/card";
-import cn from "@/utils/cn";
+import {cn} from "@/utils/cn";
 import Image from "next/image";
 import { useState } from "react";
 import { TypographyP } from "./ui/typography";

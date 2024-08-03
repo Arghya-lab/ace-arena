@@ -6,6 +6,7 @@ import joinTwenty9Room from "./joinTwenty9Room.handler";
 import leaveTwenty9Room from "./leaveTwenty9Room.handler";
 import onSocketConnect from "./onSocketConnect.handler";
 import onSocketDisconnect from "./onSocketDisconnect.handler";
+import playTrickCard from "./playTrickCard.handler";
 import redoubleChallenge from "./redoubleChallenge.handler";
 import startTwenty9game from "./startTwenty9game.handler";
 import trumpSuiteSelect from "./trumpSuiteSelect.handler";
@@ -20,6 +21,7 @@ export {
   leaveTwenty9Room,
   onSocketConnect,
   onSocketDisconnect,
+  playTrickCard,
   redoubleChallenge,
   startTwenty9game,
   trumpSuiteSelect,

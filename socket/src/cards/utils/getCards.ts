@@ -1,8 +1,8 @@
 import { chunk, shuffle } from "lodash";
 import cards from "..";
-import { IPlayerCards } from "../../@types/card";
+import { IPlayerCard } from "../../@types/card";
 
-export function getGameCards(): IPlayerCards[] {
+export function getGameCards(): IPlayerCard[] {
   const shuffleCards = shuffle(cards);
   const cardChunk = chunk(shuffleCards, 13);
 

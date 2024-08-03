@@ -3,10 +3,10 @@
 import { ICard, ICardCounts } from "@/@types/card";
 import { IPlayer } from "@/@types/game";
 import usePageSize from "@/hooks/usePageSize";
-import cn from "@/utils/cn";
+import {cn} from "@/utils/cn";
 import sortCards from "@/utils/sortCards";
 import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Card from "./Card";
 import OppHandCards from "./OppHandCards";
 import { Button } from "./ui/button";
@@ -17,30 +17,22 @@ function GameTable({
   cards,
   cardCounts,
   playableCardIds,
+  isMyTurn,
+  onCardClick
 }: {
   myPlayerId: 1 | 2 | 3 | 4;
   players: IPlayer[];
   cards: ICard[];
   cardCounts: ICardCounts;
   playableCardIds: number[];
+  isMyTurn:boolean;
+  onCardClick: (selectCard: ICard) => any
 }) {
   const [inHandCards, setInHandCards] = useState(cards);
   const [isCardSorted, setIsCardSorted] = useState(false);
   const { pageHeight } = usePageSize();
 
   const totalCards = inHandCards.length;
-
-  useEffect(() => {
-    setInHandCards(cards);
-  }, [cards]);
-
-  const handleCardClick = (selectCard: ICard) => {
-    if (playableCardIds.includes(selectCard.id)) {
-      setInHandCards((prev) =>
-        prev.filter((preCard) => preCard.id !== selectCard.id)
-      );
-    }
-  };
 
   const leftSidePlayerCardCount = cardCounts.filter(
     (cc) => cc.playerId - myPlayerId === 1 || myPlayerId - cc.playerId === 3
@@ -51,6 +43,13 @@ function GameTable({
   const rightSidePlayerCardCount = cardCounts.filter(
     (cc) => cc.playerId - myPlayerId === 3 || myPlayerId - cc.playerId === 1
   )[0].count;
+
+  const handleCardClick = (card: ICard) => {
+    onCardClick(card);
+    setInHandCards((prev) =>
+      prev.filter((preCard) => preCard.id !== card.id)
+    );
+};
 
   return (
     <div className="relative h-full w-full">

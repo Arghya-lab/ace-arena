@@ -1,9 +1,9 @@
 import { chunk, difference, differenceBy, random, shuffle } from "lodash";
 import cards from "..";
-import { ICard, IPlayerCards, SuitsEnum } from "../..//@types/card";
+import { ICard, IPlayerCard, SuitsEnum } from "../..//@types/card";
 import weightedRandomPicker from "../../utils/weightedRandomPicker";
 
-export function get29Game1stPhaseCards(): IPlayerCards[] {
+export function get29Game1stPhaseCards(): IPlayerCard[] {
   let left29GameCards: ICard[] = shuffle(
     cards.filter((card) => card.isValid29GameCard)
   );
@@ -87,7 +87,7 @@ export function get29Game1stPhaseCards(): IPlayerCards[] {
   ];
 }
 
-export function get29GameCards(_1stHand: IPlayerCards[]): IPlayerCards[] {
+export function get29GameCards(_1stHand: IPlayerCard[]): IPlayerCard[] {
   let left29GameCards: ICard[] = shuffle(
     differenceBy(
       cards.filter((card) => card.isValid29GameCard),
@@ -187,28 +187,28 @@ export function get29GameCards(_1stHand: IPlayerCards[]): IPlayerCards[] {
     {
       playerId: 1,
       cards: [
-        ...(_1stHand.find((deck) => deck.playerId === 1) as IPlayerCards).cards,
+        ...(_1stHand.find((deck) => deck.playerId === 1) as IPlayerCard).cards,
         ...(_1stPlayerCards || createUnluckyPlayerDeck()),
       ],
     },
     {
       playerId: 2,
       cards: [
-        ...(_1stHand.find((deck) => deck.playerId === 2) as IPlayerCards).cards,
+        ...(_1stHand.find((deck) => deck.playerId === 2) as IPlayerCard).cards,
         ...(_2ndPlayerCards || createUnluckyPlayerDeck()),
       ],
     },
     {
       playerId: 3,
       cards: [
-        ...(_1stHand.find((deck) => deck.playerId === 3) as IPlayerCards).cards,
+        ...(_1stHand.find((deck) => deck.playerId === 3) as IPlayerCard).cards,
         ...(_3rdPlayerCards || createUnluckyPlayerDeck()),
       ],
     },
     {
       playerId: 4,
       cards: [
-        ...(_1stHand.find((deck) => deck.playerId === 4) as IPlayerCards).cards,
+        ...(_1stHand.find((deck) => deck.playerId === 4) as IPlayerCard).cards,
         ...(_4thPlayerCards || createUnluckyPlayerDeck()),
       ],
     },

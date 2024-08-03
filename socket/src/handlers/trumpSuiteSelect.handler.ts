@@ -26,8 +26,12 @@ export default async function trumpSuiteSelect(
           !room.isSeventhCardEnable &&
           payload.trumpSuit === SeventhCardEnum.SEVENTH
         ) {
-          console.log("Invalid trumpSuit.");
-          //  emit event for invalid trump suit select
+          sendNotification({
+            io,
+            socketRooms: session.id,
+            type: "Error",
+            message: `Invalid trumpSuit.`,
+          });
         } else {
           room.trumpSuit = payload.trumpSuit;
           room.gamePhase = "trumpSelected";
@@ -41,8 +45,6 @@ export default async function trumpSuiteSelect(
           });
 
           await distributeAllTwenty9Cards(room, io);
-
-          // TODO: Initialize game
         }
       }
     } catch {

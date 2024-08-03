@@ -85,7 +85,7 @@ export default function reducer(
       return {
         ...prevState,
         gamePhase: "secondPhaseCardsGot",
-        inHandCards: cards,
+        inHandCards: [...prevState.inHandCards, ...cards],
         myPlayerId,
         cardCounts,
       };
@@ -105,6 +105,21 @@ export default function reducer(
         canISelectTrump: false,
         trumpOptions: [],
         trumpSuit: trumpSuit === "Seventh" ? null : trumpSuit,
+      };
+    }
+    case "doPlayTrickCard": {
+      const { playableCardIds } = action.payload;
+      return {
+        ...prevState,
+        playableCardIds,
+        isMyTurn:true
+      };
+    }
+    case "playedTrickCard": {
+      return {
+        ...prevState,
+        playableCardIds: [],
+        isMyTurn:false
       };
     }
 

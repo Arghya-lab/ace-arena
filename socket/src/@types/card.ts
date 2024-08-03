@@ -33,7 +33,7 @@ export interface ICard {
   "29GameCardPoint": 0 | 1 | 2 | 3;
 }
 
-export interface IPlayerCards {
+export interface IPlayerCard {
   playerId: 1 | 2 | 3 | 4;
   cards: ICard[];
 }
