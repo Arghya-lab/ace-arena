@@ -1,6 +1,6 @@
 import { chunk, difference, differenceBy, random, shuffle } from "lodash";
-import cards from "..";
-import { ICard, IPlayerCard, SuitsEnum } from "../..//@types/card";
+import { default as cardItems, default as cards } from "..";
+import { CardIdType, ICard, IPlayerCard, SuitsEnum } from "../..//@types/card";
 import weightedRandomPicker from "../../utils/weightedRandomPicker";
 
 export function get29Game1stPhaseCards(): IPlayerCard[] {
@@ -31,19 +31,14 @@ export function get29Game1stPhaseCards(): IPlayerCard[] {
       : true
     : false;
 
-  let _1stPlayerCards: ICard[] | null = null;
-  let _2ndPlayerCards: ICard[] | null = null;
-  let _3rdPlayerCards: ICard[] | null = null;
-  let _4thPlayerCards: ICard[] | null = null;
-
-  function createUnluckyPlayerDeck(): ICard[] {
+  function createUnluckyPlayerDeck(): CardIdType[] {
     const playerCards = chunk(left29GameCards, 4)[0];
     left29GameCards = differenceBy(left29GameCards, playerCards, "id");
 
-    return shuffle(playerCards);
+    return shuffle(playerCards).map((card) => card.id);
   }
 
-  function createLuckyPlayerDeck(): ICard[] {
+  function createLuckyPlayerDeck(): CardIdType[] {
     const sameSuitCardCount = weightedRandomPicker([0, 0, 60, 40]);
     const luckySuit = leftLuckySuits[random(0, leftLuckySuits.length - 1)];
 
@@ -59,30 +54,33 @@ export function get29Game1stPhaseCards(): IPlayerCard[] {
     leftLuckySuits = difference(leftLuckySuits, [luckySuit]);
     left29GameCards = differenceBy(left29GameCards, playerCards, "id");
 
-    return shuffle(playerCards);
+    return shuffle(playerCards).map((card) => card.id);
   }
-
-  if (is1stPlayerLucky) _1stPlayerCards = createLuckyPlayerDeck();
-  if (is2ndPlayerLucky) _2ndPlayerCards = createLuckyPlayerDeck();
-  if (is3rdPlayerLucky) _3rdPlayerCards = createLuckyPlayerDeck();
-  if (is4thPlayerLucky) _4thPlayerCards = createLuckyPlayerDeck();
 
   return [
     {
       playerId: 1,
-      cards: _1stPlayerCards || createUnluckyPlayerDeck(),
+      cardIds: is1stPlayerLucky
+        ? createLuckyPlayerDeck()
+        : createUnluckyPlayerDeck(),
     },
     {
       playerId: 2,
-      cards: _2ndPlayerCards || createUnluckyPlayerDeck(),
+      cardIds: is2ndPlayerLucky
+        ? createLuckyPlayerDeck()
+        : createUnluckyPlayerDeck(),
     },
     {
       playerId: 3,
-      cards: _3rdPlayerCards || createUnluckyPlayerDeck(),
+      cardIds: is3rdPlayerLucky
+        ? createLuckyPlayerDeck()
+        : createUnluckyPlayerDeck(),
     },
     {
       playerId: 4,
-      cards: _4thPlayerCards || createUnluckyPlayerDeck(),
+      cardIds: is4thPlayerLucky
+        ? createLuckyPlayerDeck()
+        : createUnluckyPlayerDeck(),
     },
   ];
 }
@@ -92,8 +90,8 @@ export function get29GameCards(_1stHand: IPlayerCard[]): IPlayerCard[] {
     differenceBy(
       cards.filter((card) => card.isValid29GameCard),
       _1stHand
-        .reduce((acc: ICard[], data) => [...acc, ...data.cards], [])
-        .filter((card) => card.isValid29GameCard),
+        .reduce((acc: CardIdType[], data) => [...acc, ...data.cardIds], [])
+        .map((cardId) => cardItems.find((card) => card.id === cardId) as ICard),
       "id"
     )
   );
@@ -101,12 +99,20 @@ export function get29GameCards(_1stHand: IPlayerCard[]): IPlayerCard[] {
   const sortedLuckyPlayers = _1stHand
     .map((data) => {
       const _1stHandRank =
-        data.cards.reduce((acc, card) => acc + card["29GameCardRank"], 0) *
-        data.cards.reduce(
-          (acc: SuitsEnum[], data) =>
-            acc.includes(data.suit) ? acc : [...acc, data.suit],
-          []
-        ).length; // rank will be 7 to 128 i.e. same suit J, 9, A, 10 =>7 point & all different suit 7, ,, 7, 7 =>128 point
+        data.cardIds
+          .map(
+            (cardId) => cardItems.find((card) => card.id === cardId) as ICard
+          )
+          .reduce((acc, card) => acc + card["29GameCardRank"], 0) *
+        data.cardIds
+          .map(
+            (cardId) => cardItems.find((card) => card.id === cardId) as ICard
+          )
+          .reduce(
+            (acc: SuitsEnum[], data) =>
+              acc.includes(data.suit) ? acc : [...acc, data.suit],
+            []
+          ).length; // rank will be 7 to 128 i.e. same suit J, 9, A, 10 =>7 point & all different suit 7, ,, 7, 7 =>128 point
 
       let luckyPoint: number;
 
@@ -146,14 +152,14 @@ export function get29GameCards(_1stHand: IPlayerCard[]): IPlayerCard[] {
     .sort((a, b) => b[1] - a[1])
     .map((entry) => entry as [SuitsEnum, number]);
 
-  function createUnluckyPlayerDeck(): ICard[] {
+  function createUnluckyPlayerDeck(): CardIdType[] {
     const playerCards = chunk(left29GameCards, 4)[0];
     left29GameCards = differenceBy(left29GameCards, playerCards, "id");
 
-    return shuffle(playerCards);
+    return shuffle(playerCards.map((card) => card.id));
   }
 
-  function createLuckyPlayerDeck(): ICard[] {
+  function createLuckyPlayerDeck(): CardIdType[] {
     const luckySuit =
       sortedSuitCounts[
         weightedRandomPicker(sortedSuitCounts.map((i) => i[1]))
@@ -168,48 +174,52 @@ export function get29GameCards(_1stHand: IPlayerCard[]): IPlayerCard[] {
     const extraCards = left29GameCards.slice(0, 4 - luckySuitCards.length);
     left29GameCards = differenceBy(left29GameCards, extraCards, "id");
 
-    return shuffle([...extraCards, ...luckySuitCards]);
+    return shuffle([...extraCards, ...luckySuitCards].map((card) => card.id));
   }
 
-  let _1stPlayerCards: ICard[] | null = null;
-  let _2ndPlayerCards: ICard[] | null = null;
-  let _3rdPlayerCards: ICard[] | null = null;
-  let _4thPlayerCards: ICard[] | null = null;
+  let _1stPlayerCardIds: CardIdType[] | null = null;
+  let _2ndPlayerCardIds: CardIdType[] | null = null;
+  let _3rdPlayerCardIds: CardIdType[] | null = null;
+  let _4thPlayerCardIds: CardIdType[] | null = null;
 
   sortedLuckyPlayers.forEach((luckyPlayer) => {
-    if (luckyPlayer.playerId === 1) _1stPlayerCards = createLuckyPlayerDeck();
-    if (luckyPlayer.playerId === 2) _2ndPlayerCards = createLuckyPlayerDeck();
-    if (luckyPlayer.playerId === 3) _3rdPlayerCards = createLuckyPlayerDeck();
-    if (luckyPlayer.playerId === 4) _4thPlayerCards = createLuckyPlayerDeck();
+    if (luckyPlayer.playerId === 1) _1stPlayerCardIds = createLuckyPlayerDeck();
+    if (luckyPlayer.playerId === 2) _2ndPlayerCardIds = createLuckyPlayerDeck();
+    if (luckyPlayer.playerId === 3) _3rdPlayerCardIds = createLuckyPlayerDeck();
+    if (luckyPlayer.playerId === 4) _4thPlayerCardIds = createLuckyPlayerDeck();
   });
 
   return [
     {
       playerId: 1,
-      cards: [
-        ...(_1stHand.find((deck) => deck.playerId === 1) as IPlayerCard).cards,
-        ...(_1stPlayerCards || createUnluckyPlayerDeck()),
+      cardIds: [
+        ...(_1stHand.find((deck) => deck.playerId === 1) as IPlayerCard)
+          .cardIds,
+        ...(_1stPlayerCardIds || createUnluckyPlayerDeck()),
       ],
     },
     {
       playerId: 2,
-      cards: [
-        ...(_1stHand.find((deck) => deck.playerId === 2) as IPlayerCard).cards,
-        ...(_2ndPlayerCards || createUnluckyPlayerDeck()),
+      cardIds: [
+        ...(_1stHand.find((deck) => deck.playerId === 2) as IPlayerCard)
+          .cardIds,
+        ...(_2ndPlayerCardIds || createUnluckyPlayerDeck()),
       ],
     },
     {
       playerId: 3,
-      cards: [
-        ...(_1stHand.find((deck) => deck.playerId === 3) as IPlayerCard).cards,
-        ...(_3rdPlayerCards || createUnluckyPlayerDeck()),
+      cardIds: [
+        ...(_1stHand.find((deck) => deck.playerId === 3) as IPlayerCard)
+          .cardIds,
+        ...(_3rdPlayerCardIds || createUnluckyPlayerDeck()),
       ],
     },
     {
       playerId: 4,
-      cards: [
-        ...(_1stHand.find((deck) => deck.playerId === 4) as IPlayerCard).cards,
-        ...(_4thPlayerCards || createUnluckyPlayerDeck()),
+      cardIds: [
+        ...(_1stHand.find((deck) => deck.playerId === 4) as IPlayerCard)
+          .cardIds,
+        ...(_4thPlayerCardIds || createUnluckyPlayerDeck()),
       ],
     },
   ];

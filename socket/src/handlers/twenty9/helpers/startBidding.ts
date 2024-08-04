@@ -1,7 +1,7 @@
 import { random } from "lodash";
 import { Server } from "socket.io";
-import { SocketEvent } from "../../@types/socket";
-import { ITwenty9RoomDocument } from "../../schema/twenty9Room.schema";
+import { SocketEvent } from "../../../@types/socket";
+import { ITwenty9RoomDocument } from "../../../schema/twenty9Room.schema";
 
 export default async function startBidding(
   room: ITwenty9RoomDocument,

@@ -1,4 +1,4 @@
-import { ICard, IPlayerCard, TrumpOptionsEnum } from "./card";
+import { CardIdType, IPlayerCard, TrumpOptionsEnum } from "./card";
 
 export interface IUserSchema {
   clerkId: string;
@@ -31,11 +31,11 @@ export interface ITwenty9RoomSchema {
   cardDistributions: IPlayerCard[];
   currTrickCards: {
     playerId: 1 | 2 | 3 | 4;
-    card: ICard;
+    cardId: CardIdType;
   }[];
   prevTrickWinnerId: 1 | 2 | 3 | 4 | null;
-  ATeamTricksWonCards: ICard[];
-  BTeamTricksWonCards: ICard[];
+  ATeamTricksWonCardIds: CardIdType[];
+  BTeamTricksWonCardIds: CardIdType[];
   gamePhase:
     | "uninitialized" //  game not started
     | "firstPhaseCardsDistributed" // first phase cards distributed but not yet bidding started

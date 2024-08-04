@@ -1,8 +1,8 @@
 import { Server } from "socket.io";
-import { ICard, ICardCounts } from "../../@types/card";
-import { SocketEvent } from "../../@types/socket";
-import { get29Game1stPhaseCards } from "../../cards";
-import { ITwenty9RoomDocument } from "../../schema/twenty9Room.schema";
+import { CardIdType, ICardCounts, IPlayerCard } from "../../../@types/card";
+import { SocketEvent } from "../../../@types/socket";
+import { get29Game1stPhaseCards } from "../../../cards";
+import { ITwenty9RoomDocument } from "../../../schema/twenty9Room.schema";
 
 export default async function distributeFirstPhaseCards(
   room: ITwenty9RoomDocument,
@@ -13,18 +13,18 @@ export default async function distributeFirstPhaseCards(
   await room.save();
 
   room.players.forEach((player) => {
-    const playerFirstHandCards =
-      room.cardDistributions.find(
+    const playerFirstHandCardIds =
+      (room.cardDistributions.find(
         (cardDistribution) => cardDistribution.playerId === player.playerId
-      )?.cards || [];
+      ) as IPlayerCard).cardIds;
 
     const data: {
       myPlayerId: 1 | 2 | 3 | 4;
-      cards: ICard[];
+      cardIds: CardIdType[];
       cardCounts: ICardCounts;
     } = {
       myPlayerId: player.playerId,
-      cards: playerFirstHandCards,
+      cardIds: playerFirstHandCardIds,
       cardCounts: [
         { playerId: 1, count: 4 },
         { playerId: 2, count: 4 },

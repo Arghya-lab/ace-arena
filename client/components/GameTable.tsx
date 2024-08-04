@@ -3,10 +3,8 @@
 import { ICard, ICardCounts } from "@/@types/card";
 import { IPlayer } from "@/@types/game";
 import usePageSize from "@/hooks/usePageSize";
-import {cn} from "@/utils/cn";
-import sortCards from "@/utils/sortCards";
+import { cn } from "@/utils/cn";
 import { AnimatePresence, motion } from "framer-motion";
-import { useState } from "react";
 import Card from "./Card";
 import OppHandCards from "./OppHandCards";
 import { Button } from "./ui/button";
@@ -14,24 +12,25 @@ import { Button } from "./ui/button";
 function GameTable({
   myPlayerId,
   players,
-  cards,
+  inHandCards,
   cardCounts,
   playableCardIds,
   isMyTurn,
-  onCardClick
+  onCardClick,
+  isCardSorted,
+  sortCards,
 }: {
   myPlayerId: 1 | 2 | 3 | 4;
   players: IPlayer[];
-  cards: ICard[];
+  inHandCards: ICard[];
   cardCounts: ICardCounts;
   playableCardIds: number[];
-  isMyTurn:boolean;
-  onCardClick: (selectCard: ICard) => any
+  isMyTurn: boolean;
+  onCardClick: (selectCard: ICard) => any;
+  isCardSorted: boolean;
+  sortCards: () => any;
 }) {
-  const [inHandCards, setInHandCards] = useState(cards);
-  const [isCardSorted, setIsCardSorted] = useState(false);
   const { pageHeight } = usePageSize();
-
   const totalCards = inHandCards.length;
 
   const leftSidePlayerCardCount = cardCounts.filter(
@@ -43,13 +42,6 @@ function GameTable({
   const rightSidePlayerCardCount = cardCounts.filter(
     (cc) => cc.playerId - myPlayerId === 3 || myPlayerId - cc.playerId === 1
   )[0].count;
-
-  const handleCardClick = (card: ICard) => {
-    onCardClick(card);
-    setInHandCards((prev) =>
-      prev.filter((preCard) => preCard.id !== card.id)
-    );
-};
 
   return (
     <div className="relative h-full w-full">
@@ -63,10 +55,7 @@ function GameTable({
         {!isCardSorted && (
           <Button
             className="absolute bottom-4 right-4 z-[85]"
-            onClick={() => {
-              setInHandCards((prev) => sortCards(prev));
-              setIsCardSorted(true);
-            }}
+            onClick={sortCards}
           >
             sort
           </Button>
@@ -98,7 +87,7 @@ function GameTable({
                 rotate: 0,
                 scale: 0.75,
               }}
-              onClick={() => handleCardClick(card)}
+              onClick={() => onCardClick(card)}
             >
               <Card card={card} />
             </motion.div>

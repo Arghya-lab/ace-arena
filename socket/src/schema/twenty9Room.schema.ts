@@ -1,6 +1,5 @@
 import { Document, Schema } from "mongoose";
 import { ITwenty9RoomSchema } from "../@types/schema";
-import cardSchema from "./card.schema";
 import userSchema from "./user.schema";
 
 export interface ITwenty9RoomDocument extends ITwenty9RoomSchema, Document {}
@@ -81,14 +80,9 @@ const twenty9RoomSchema = new Schema<ITwenty9RoomDocument>({
         enum: [1, 2, 3, 4],
         required: true,
       },
-      cards: { type: [cardSchema], required: true },
+      cardIds: { type: [ Number ], required: true },
     },
   ],
-  prevTrickWinnerId: {
-    type: Number,
-    enum: [1, 2, 3, 4],
-    default: null,
-  },
   currTrickCards: [
     {
       playerId: {
@@ -96,9 +90,16 @@ const twenty9RoomSchema = new Schema<ITwenty9RoomDocument>({
         enum: [1, 2, 3, 4],
         required: true,
       },
-      card: { type: cardSchema, required: true },
+      cardId: { type: Number, required: true },
     },
   ],
+  prevTrickWinnerId: {
+    type: Number,
+    enum: [1, 2, 3, 4],
+    default: null,
+  },
+  ATeamTricksWonCardIds: { type: [ Number ], default: []},
+  BTeamTricksWonCardIds: { type: [ Number ], default: []},
   gamePhase: {
     type: String,
     enum: [

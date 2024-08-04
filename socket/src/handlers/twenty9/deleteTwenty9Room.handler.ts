@@ -1,7 +1,7 @@
 import { Server } from "socket.io";
-import { SessionSocket, SocketEvent } from "../@types/socket";
-import Twenty9Room from "../models/Twenty9Room.model";
-import sendNotification from "./helpers/sendNotification.main";
+import { SessionSocket, SocketEvent } from "../../@types/socket";
+import Twenty9Room from "../../models/Twenty9Room.model";
+import sendNotification from "../helpers/sendNotification.main";
 
 export default async function deleteTwenty9Room(
   this: { socket: SessionSocket; io: Server },

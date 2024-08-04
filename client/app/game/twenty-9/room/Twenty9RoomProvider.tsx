@@ -1,6 +1,12 @@
 "use client";
 
-import { ICard, ICardCounts, SuitsEnum, TrumpOptionsEnum } from "@/@types/card";
+import {
+  CardIdType,
+  ICard,
+  ICardCounts,
+  SuitsEnum,
+  TrumpOptionsEnum,
+} from "@/@types/card";
 import { IPlayer } from "@/@types/game";
 import { SocketEvent } from "@/@types/socket";
 import {
@@ -39,8 +45,9 @@ const initialTwenty9RoomState: Twenty9RoomStateType = {
   canISelectTrump: false,
   trumpOptions: [],
   trumpSuit: null,
-  playableCardIds:[],
-  isMyTurn:false
+  playableCardIds: [],
+  isMyTurn: false,
+  isCardSorted: false,
 };
 
 const Twenty9RoomContext = createContext<Twenty9RoomContextType>({
@@ -53,7 +60,8 @@ const Twenty9RoomContext = createContext<Twenty9RoomContextType>({
     payload: ChallengePayloadType
   ) => {},
   handleSelectTrump: (trumpSuit: TrumpOptionsEnum) => {},
-  onCardClick: (card: ICard) => {}
+  onCardClick: (card: ICard) => {},
+  sortCards: () => {},
 });
 
 export const useTwenty9RoomState = () => useContext(Twenty9RoomContext);
@@ -74,7 +82,7 @@ export function Twenty9RoomProvider({
   useEffect(() => {
     const onTwenty9FirstPhaseCards = (payload: {
       myPlayerId: 1 | 2 | 3 | 4;
-      cards: ICard[];
+      cardIds: CardIdType[];
       cardCounts: ICardCounts;
     }) => dispatch({ type: "firstPhaseCards", payload });
 
@@ -106,7 +114,7 @@ export function Twenty9RoomProvider({
 
     const onTwenty9AllCards = (payload: {
       myPlayerId: 1 | 2 | 3 | 4;
-      cards: ICard[];
+      cardIds: CardIdType[];
       cardCounts: ICardCounts;
     }) => dispatch({ type: "setAllCards", payload });
 
@@ -114,7 +122,7 @@ export function Twenty9RoomProvider({
       dispatch({ type: "trumpSuit", payload });
 
     const onDoPlayTrickCard = (payload: { playableCardIds: number[] }) => {
-      dispatch({type:"doPlayTrickCard", payload})
+      dispatch({ type: "doPlayTrickCard", payload });
     };
 
     const onTrickWinner = (payload: { playerId: 1 | 2 | 3 | 4 }) => {
@@ -219,16 +227,17 @@ export function Twenty9RoomProvider({
       dispatch({ type: "userTrumpSelect", payload: { trumpSuit } });
     }
   };
-  
+
   const onCardClick = (card: ICard) => {
     if (socket && room) {
       socket.emit(SocketEvent.PLAY_TWENTY9_TRICK_CARD, {
         roomCode: room.roomCode,
         cardId: card.id,
       });
-      dispatch({ type: "playedTrickCard"});
+      dispatch({ type: "playedTrickCard", payload: { cardId: card.id } });
     }
   };
+  const sortCards = () => dispatch({ type: "sortCards" });
 
   return (
     <Twenty9RoomContext.Provider
@@ -239,7 +248,8 @@ export function Twenty9RoomProvider({
         handleBid,
         handleChallenge,
         handleSelectTrump,
-        onCardClick
+        onCardClick,
+        sortCards,
       }}
     >
       {children}

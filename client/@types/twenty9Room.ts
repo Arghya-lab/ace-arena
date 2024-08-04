@@ -1,5 +1,11 @@
 import { Dispatch } from "react";
-import { ICard, ICardCounts, SuitsEnum, TrumpOptionsEnum } from "./card";
+import {
+  CardIdType,
+  ICard,
+  ICardCounts,
+  SuitsEnum,
+  TrumpOptionsEnum,
+} from "./card";
 import { IPlayer } from "./game";
 
 export type ChallengeType = "double" | "redouble";
@@ -30,6 +36,7 @@ export interface Twenty9RoomStateType {
   trumpSuit: SuitsEnum | null;
   playableCardIds: number[];
   isMyTurn: boolean;
+  isCardSorted: boolean;
 }
 
 export interface Twenty9RoomContextType extends Twenty9RoomStateType {
@@ -41,7 +48,8 @@ export interface Twenty9RoomContextType extends Twenty9RoomStateType {
     payload: ChallengePayloadType
   ) => void;
   handleSelectTrump: (trumpSuit: TrumpOptionsEnum) => void;
-  onCardClick: (card: ICard) => any
+  onCardClick: (card: ICard) => any;
+  sortCards: () => any;
 }
 
 //  reducer action types
@@ -49,7 +57,7 @@ interface FirstPhaseCardsActionType {
   type: "firstPhaseCards";
   payload: {
     myPlayerId: 1 | 2 | 3 | 4;
-    cards: ICard[];
+    cardIds: CardIdType[];
     cardCounts: ICardCounts;
   };
 }
@@ -104,7 +112,7 @@ interface SetAllCardsActionType {
   type: "setAllCards";
   payload: {
     myPlayerId: 1 | 2 | 3 | 4;
-    cards: ICard[];
+    cardIds: CardIdType[];
     cardCounts: ICardCounts;
   };
 }
@@ -120,10 +128,14 @@ interface UserTrumpSelectActionType {
 }
 interface DoPlayTrickCardActionType {
   type: "doPlayTrickCard";
-  payload: { playableCardIds: number[] }
+  payload: { playableCardIds: number[] };
 }
 interface PlayedTrickCardActionType {
   type: "playedTrickCard";
+  payload: { cardId: CardIdType };
+}
+interface SortCardsActionType {
+  type: "sortCards";
 }
 
 export type Twenty9RoomActionType =
@@ -139,4 +151,7 @@ export type Twenty9RoomActionType =
   | RemoveChallengeActionType
   | SetAllCardsActionType
   | SetTrumpSuitActionType
-  | UserTrumpSelectActionType|DoPlayTrickCardActionType|PlayedTrickCardActionType
+  | UserTrumpSelectActionType
+  | DoPlayTrickCardActionType
+  | PlayedTrickCardActionType
+  | SortCardsActionType;

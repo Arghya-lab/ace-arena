@@ -1,9 +1,9 @@
 import { Server } from "socket.io";
-import { SeventhCardEnum, TrumpOptionsEnum } from "../@types/card";
-import { SessionSocket } from "../@types/socket";
-import Twenty9Room from "../models/Twenty9Room.model";
-import distributeAllTwenty9Cards from "./helpers/distributeAllTwenty9Cards.twenty9";
-import sendNotification from "./helpers/sendNotification.main";
+import { SeventhCardEnum, TrumpOptionsEnum } from "../../@types/card";
+import { SessionSocket } from "../../@types/socket";
+import Twenty9Room from "../../models/Twenty9Room.model";
+import distributeAllTwenty9Cards from "./helpers/distributeAllTwenty9Cards";
+import sendNotification from "../helpers/sendNotification.main";
 
 export default async function trumpSuiteSelect(
   this: { socket: SessionSocket; io: Server },

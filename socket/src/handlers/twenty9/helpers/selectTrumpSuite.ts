@@ -4,10 +4,10 @@ import {
   SeventhCardEnum,
   SuitsEnum,
   TrumpOptionsEnum,
-} from "../../@types/card";
-import { SocketEvent } from "../../@types/socket";
-import { ITwenty9RoomDocument } from "../../schema/twenty9Room.schema";
-import sendNotification from "./sendNotification.main";
+} from "../../../@types/card";
+import { SocketEvent } from "../../../@types/socket";
+import { ITwenty9RoomDocument } from "../../../schema/twenty9Room.schema";
+import sendNotification from "../../helpers/sendNotification.main";
 
 export default async function selectTrumpSuite(
   room: ITwenty9RoomDocument,

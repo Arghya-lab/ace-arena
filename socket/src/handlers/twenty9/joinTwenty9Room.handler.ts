@@ -1,9 +1,9 @@
 import { difference } from "lodash";
 import { Server } from "socket.io";
-import { GameEnum } from "../@types/game";
-import { SessionSocket, SocketEvent } from "../@types/socket";
-import Twenty9Room from "../models/Twenty9Room.model";
-import sendNotification from "./helpers/sendNotification.main";
+import { GameEnum } from "../../@types/game";
+import { SessionSocket, SocketEvent } from "../../@types/socket";
+import sendNotification from "../helpers/sendNotification.main";
+import Twenty9Room from "../../models/Twenty9Room.model";
 
 export default async function joinTwenty9Room(
   this: { socket: SessionSocket; io: Server },

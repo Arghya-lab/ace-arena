@@ -1,8 +1,8 @@
 import { Server } from "socket.io";
-import { SessionSocket, SocketEvent } from "../@types/socket";
-import Twenty9Room from "../models/Twenty9Room.model";
-import selectTrumpSuite from "./helpers/selectTrumpSuite.twenty9";
-import sendNotification from "./helpers/sendNotification.main";
+import { SessionSocket, SocketEvent } from "../../@types/socket";
+import Twenty9Room from "../../models/Twenty9Room.model";
+import sendNotification from "../helpers/sendNotification.main";
+import selectTrumpSuite from "./helpers/selectTrumpSuite";
 
 export default async function doubleChallenge(
   this: { socket: SessionSocket; io: Server },

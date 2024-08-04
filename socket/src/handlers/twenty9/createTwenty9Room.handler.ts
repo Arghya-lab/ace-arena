@@ -1,9 +1,9 @@
 import { Server } from "socket.io";
-import { GameEnum } from "../@types/game";
-import { SessionSocket, SocketEvent } from "../@types/socket";
-import Twenty9Room from "../models/Twenty9Room.model";
-import genRoomCode from "../utils/genRoomCode";
-import sendNotification from "./helpers/sendNotification.main";
+import { GameEnum } from "../../@types/game";
+import { SessionSocket, SocketEvent } from "../../@types/socket";
+import Twenty9Room from "../../models/Twenty9Room.model";
+import genRoomCode from "../../utils/genRoomCode";
+import sendNotification from "../helpers/sendNotification.main";
 
 export default async function createTwenty9Room(
   this: { socket: SessionSocket; io: Server },

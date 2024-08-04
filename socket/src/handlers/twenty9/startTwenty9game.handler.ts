@@ -1,9 +1,9 @@
 import { Server } from "socket.io";
-import { SessionSocket } from "../@types/socket";
-import Twenty9Room from "../models/Twenty9Room.model";
-import { ITwenty9RoomDocument } from "../schema/twenty9Room.schema";
-import distributeFirstPhaseCards from "./helpers/distributeFirstPhaseCards.twenty9";
-import startBiding from "./helpers/startBidding.twenty9";
+import { SessionSocket } from "../../@types/socket";
+import Twenty9Room from "../../models/Twenty9Room.model";
+import { ITwenty9RoomDocument } from "../../schema/twenty9Room.schema";
+import distributeFirstPhaseCards from "./helpers/distributeFirstPhaseCards";
+import startBiding from "./helpers/startBidding";
 
 export default async function startTwenty9game(
   this: { socket: SessionSocket; io: Server },

@@ -1,8 +1,8 @@
 import { Server } from "socket.io";
-import { IUserSchema } from "../@types/schema";
-import { SessionSocket, SocketEvent } from "../@types/socket";
-import Twenty9Room from "../models/Twenty9Room.model";
-import sendNotification from "./helpers/sendNotification.main";
+import { IUserSchema } from "../../@types/schema";
+import { SessionSocket, SocketEvent } from "../../@types/socket";
+import Twenty9Room from "../../models/Twenty9Room.model";
+import sendNotification from "../helpers/sendNotification.main";
 
 export default async function addPlayerToAdminTeam_twenty9Room(
   this: { socket: SessionSocket; io: Server },

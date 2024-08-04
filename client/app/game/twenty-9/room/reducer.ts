@@ -1,7 +1,10 @@
+import { ICard } from "@/@types/card";
 import {
   Twenty9RoomActionType,
   Twenty9RoomStateType,
 } from "@/@types/twenty9Room";
+import cardItems from "@/cards";
+import sortCards from "@/utils/sortCards";
 
 export default function reducer(
   prevState: Twenty9RoomStateType,
@@ -9,11 +12,15 @@ export default function reducer(
 ): Twenty9RoomStateType {
   switch (action.type) {
     case "firstPhaseCards": {
-      const { cardCounts, cards, myPlayerId } = action.payload;
+      const { cardCounts, cardIds, myPlayerId } = action.payload;
+      const inHandCards = cardIds.map(
+        (cardId) => cardItems.find((card) => card.id === cardId) as ICard
+      );
+
       return {
         ...prevState,
         gamePhase: "firstPhaseCardsGot",
-        inHandCards: cards,
+        inHandCards,
         myPlayerId,
         cardCounts,
       };
@@ -81,11 +88,15 @@ export default function reducer(
       };
     }
     case "setAllCards": {
-      const { cardCounts, cards, myPlayerId } = action.payload;
+      const { cardCounts, cardIds, myPlayerId } = action.payload;
+      const inHandCards = cardIds.map(
+        (cardId) => cardItems.find((card) => card.id === cardId) as ICard
+      );
+
       return {
         ...prevState,
         gamePhase: "secondPhaseCardsGot",
-        inHandCards: [...prevState.inHandCards, ...cards],
+        inHandCards,
         myPlayerId,
         cardCounts,
       };
@@ -112,14 +123,25 @@ export default function reducer(
       return {
         ...prevState,
         playableCardIds,
-        isMyTurn:true
+        isMyTurn: true,
       };
     }
     case "playedTrickCard": {
+      const { cardId } = action.payload;
       return {
         ...prevState,
+        inHandCards: prevState.inHandCards.filter(
+          (preCard) => preCard.id !== cardId
+        ),
         playableCardIds: [],
-        isMyTurn:false
+        isMyTurn: false,
+      };
+    }
+    case "sortCards": {
+      return {
+        ...prevState,
+        inHandCards: sortCards(prevState.inHandCards),
+        isCardSorted: true,
       };
     }
 

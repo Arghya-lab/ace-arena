@@ -24,7 +24,9 @@ function Twenty9RoomPage() {
     trumpSuit,
     playableCardIds,
     isMyTurn,
-    onCardClick
+    isCardSorted,
+    sortCards,
+    onCardClick,
   } = useTwenty9RoomState();
 
   if (!room) return null;
@@ -62,13 +64,15 @@ function Twenty9RoomPage() {
         <ChallengeBoard />
         <TrumpBoard />
         <GameTable
-          cards={inHandCards}
+          inHandCards={inHandCards}
           cardCounts={cardCounts}
           players={room.players}
           myPlayerId={myPlayerId}
           playableCardIds={playableCardIds}
           isMyTurn={isMyTurn}
+          isCardSorted={isCardSorted}
           onCardClick={onCardClick}
+          sortCards={sortCards}
         />
       </div>
     );

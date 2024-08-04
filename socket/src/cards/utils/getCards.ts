@@ -3,25 +3,25 @@ import cards from "..";
 import { IPlayerCard } from "../../@types/card";
 
 export function getGameCards(): IPlayerCard[] {
-  const shuffleCards = shuffle(cards);
+  const shuffleCards = shuffle(cards.map((card) => card.id));
   const cardChunk = chunk(shuffleCards, 13);
 
   return [
     {
       playerId: 1,
-      cards: cardChunk[0],
+      cardIds: cardChunk[0],
     },
     {
       playerId: 2,
-      cards: cardChunk[1],
+      cardIds: cardChunk[1],
     },
     {
       playerId: 3,
-      cards: cardChunk[2],
+      cardIds: cardChunk[2],
     },
     {
       playerId: 4,
-      cards: cardChunk[3],
+      cardIds: cardChunk[3],
     },
   ];
 }
